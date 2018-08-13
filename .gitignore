@@ -1,0 +1,31 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+##################
+# GLOBAL TO REPOSITORY
+##################
+
+*.js.map
+*.sublime-workspace
+
+.DS_Store
+
+/FinalProject/Client/bin
+/FinalProject/Client/obj
+/FinalProject/Simulator/bin
+/FinalProject/Simulator/obj
+/FinalProject/Server/bin
+/FinalProject/Server/obj
+/FinalProject/BL/bin
+/FinalProject/BL/obj
+/FinalProject/Common/bin
+/FinalProject/Common/obj
+/FinalProject/DAL/bin
+/FinalProject/DAL/obj
+/FinalProject/Tests/bin
+/FinalProject/Tests/obj
+/FinalProject/Repository/bin
+/FinalProject/Repository/obj
+/FinalProject/packages
+/FinalProject/.vs
