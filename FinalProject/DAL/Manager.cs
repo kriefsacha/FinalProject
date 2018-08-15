@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class Class1
+    public class Manager
     {
-        public Class1()
+        public Manager()
         {
 
         }
