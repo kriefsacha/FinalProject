@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,22 @@ namespace DAL
 {
     public class Manager
     {
-        public Manager()
+        public void Departure(Plane plane)
         {
+            using (AirportDataModel context = new AirportDataModel())
+            {
+                context.Departures.Add(new Departure() { PlaneId = plane.ID, DatePlanned = DateTime.Now });
+                context.SaveChanges();
+            }
+        }
 
+        public void Arrival(Plane plane)
+        {
+            using (AirportDataModel context = new AirportDataModel())
+            {
+                context.Arrivals.Add(new Arrival() { PlaneId = plane.ID, DatePlanned = DateTime.Now });
+                context.SaveChanges();
+            }
         }
     }
 }

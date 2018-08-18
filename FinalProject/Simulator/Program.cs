@@ -20,7 +20,7 @@ namespace Simulator
             Console.WriteLine("--------------------------------------------------------------" + Environment.NewLine);
             rnd = new Random();
 
-            HubConnection connection = new HubConnection("http://localhost:63938/");
+            HubConnection connection = new HubConnection("https://finalprojectsela.azurewebsites.net");
             proxy = connection.CreateHubProxy("AirportHub");
             connection.Start().Wait();
             proxy.On<string>("departure", Departure);

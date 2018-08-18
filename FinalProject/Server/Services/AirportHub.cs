@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Interfaces;
 using Microsoft.AspNet.SignalR;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,13 @@ namespace Server.Services
 {
     public class AirportHub : Hub
     {
+        ILogic logic;
+
+        public AirportHub(ILogic logic)
+        {
+            this.logic = logic;
+        }
+
         public void Init()
         {
 
@@ -16,11 +24,13 @@ namespace Server.Services
 
         public void Departure(Plane Plane)
         {
+            logic.Departure(Plane);
             Clients.All.departure(Plane.ID);
         }
 
         public void Arrival(Plane Plane)
         {
+            logic.Arrival(Plane);
             Clients.All.arrival(Plane.ID);
         }
 
