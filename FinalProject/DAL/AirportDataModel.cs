@@ -1,14 +1,17 @@
 namespace DAL
 {
     using Common;
+    using Microsoft.Azure;
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.Data.Entity;
 
     public class AirportDataModel : DbContext
     {
+        static readonly string connectionString = CloudConfigurationManager.GetSetting("dbconnectionstring");
+
         public AirportDataModel()
-            : base("name=AirportDataModel")
+            : base(connectionString)
         {
             Database.SetInitializer(new AirportInitializer());
         }
