@@ -21,5 +21,7 @@ namespace Common
             }
         }
 
+        public int waitingTime { get; set; }
+
     }
 }

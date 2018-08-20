@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 
 namespace Common.Interfaces
 {
-    public interface IDAL
+    public interface IFlightRepository
     {
-        void Init();
+        void Departure(Plane plane);
 
-        void Departure(Plane Plane);
-
-        void Arrival(Plane Plane);
-
-        void MoveRequest(Plane Plane);
+        void Arrival(Plane plane);
     }
 }

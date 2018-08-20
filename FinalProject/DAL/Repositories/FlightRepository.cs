@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL
+namespace DAL.Repositories
 {
-    public class Manager : IDAL
+    public class FlightRepository : IFlightRepository
     {
         public void Departure(Plane plane)
         {
@@ -26,16 +26,6 @@ namespace DAL
                 context.Arrivals.Add(new Arrival() { PlaneId = plane.ID, DatePlanned = DateTime.Now });
                 context.SaveChanges();
             }
-        }
-
-        public void Init()
-        {
-           
-        }
-
-        public void MoveRequest(Plane Plane)
-        {
-            
         }
     }
 }

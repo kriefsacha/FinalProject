@@ -54,8 +54,10 @@
   <ItemGroup>
     <Compile Include="AirportDataModel.cs" />
     <Compile Include="AirportInitializer.cs" />
-    <Compile Include="Manager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\FlightRepository.cs" />
+    <Compile Include="Repositories\PlaneRepository.cs" />
+    <Compile Include="Repositories\StationRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -67,5 +69,6 @@
       <Name>Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

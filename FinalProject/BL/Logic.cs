@@ -10,20 +10,27 @@ namespace BL
 {
     public class Logic : ILogic
     {
-        IDAL manager;
+        IFlightRepository flightRepository;
+        IPlaneRepository planeRepository;
+        IStationRepository stationRepository;
 
-        public Logic(IDAL DAL)
+        public Logic(IFlightRepository flightRepository ,
+            IPlaneRepository planeRepository ,
+            IStationRepository stationRepository)
         {
-            manager = DAL;
+            this.flightRepository = flightRepository;
+            this.planeRepository = planeRepository;
+            this.stationRepository = stationRepository;
         }
+
         public void Arrival(Plane Plane)
         {
-            manager.Arrival(Plane);
+            flightRepository.Arrival(Plane);
         }
 
         public void Departure(Plane Plane)
         {
-            manager.Departure(Plane);
+            flightRepository.Departure(Plane);
         }
 
         public void Init()
