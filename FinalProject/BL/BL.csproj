@@ -55,10 +55,6 @@
       <Project>{69025e0d-0041-4822-a797-449c0d3fff84}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DAL\DAL.csproj">
-      <Project>{ae303f88-b7cc-44e1-ba65-0f29d8db4337}</Project>
-      <Name>DAL</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

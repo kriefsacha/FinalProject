@@ -1,4 +1,5 @@
 ﻿using BL;
+using DAL;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Owin;
@@ -13,7 +14,7 @@ namespace Server
         public void Configuration(IAppBuilder app)
         {
             GlobalHost.DependencyResolver.Register(
-                typeof(AirportHub), () => new AirportHub(new Logic()));
+                typeof(AirportHub), () => new AirportHub(new Logic(new Manager())));
             app.MapSignalR();
         }
     }

@@ -1,6 +1,5 @@
 ﻿using Common;
 using Common.Interfaces;
-using DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +10,11 @@ namespace BL
 {
     public class Logic : ILogic
     {
-        Manager manager;
-        public Logic()
+        ILogic manager;
+
+        public Logic(ILogic DAL)
         {
-            manager = new Manager();
+            manager = DAL;
         }
         public void Arrival(Plane Plane)
         {
