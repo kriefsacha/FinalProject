@@ -10,9 +10,9 @@ namespace BL
 {
     public class Logic : ILogic
     {
-        ILogic manager;
+        IDAL manager;
 
-        public Logic(ILogic DAL)
+        public Logic(IDAL DAL)
         {
             manager = DAL;
         }

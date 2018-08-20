@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class Manager : ILogic
+    public class Manager : IDAL
     {
         public void Departure(Plane plane)
         {

@@ -143,7 +143,7 @@
       <Name>BL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{69025e0d-0041-4822-a797-449c0d3fff84}</Project>
+      <Project>{69025E0D-0041-4822-A797-449C0D3FFF84}</Project>
       <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\DAL\DAL.csproj">

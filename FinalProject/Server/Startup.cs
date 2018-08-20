@@ -1,4 +1,5 @@
 ﻿using BL;
+using Common.Interfaces;
 using DAL;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
@@ -13,8 +14,10 @@ namespace Server
     {
         public void Configuration(IAppBuilder app)
         {
+            GlobalHost.DependencyResolver.Register(typeof(IDAL), () => new Manager());
+            GlobalHost.DependencyResolver.Register(typeof(ILogic), () => new Logic((IDAL)GlobalHost.DependencyResolver.GetService(typeof(IDAL))));
             GlobalHost.DependencyResolver.Register(
-                typeof(AirportHub), () => new AirportHub(new Logic(new Manager())));
+                typeof(AirportHub), () => new AirportHub((ILogic)GlobalHost.DependencyResolver.GetService(typeof(ILogic))));
             app.MapSignalR();
         }
     }
