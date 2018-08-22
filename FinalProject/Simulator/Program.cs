@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Enums;
 using Microsoft.AspNet.SignalR.Client;
 using System;
 using System.Collections.Generic;
@@ -84,13 +85,16 @@ namespace Simulator
             Plane plane = new Plane();
             plane.ID = $"{GetLetter()}{GetLetter()}{GetNumber()}{GetNumber()}{GetNumber()}";
             plane.ActionTime = GetActionTime();
+            plane.waitingTime = GetWaitingTime();
 
-            switch (rnd.Next(0, 2))
+            switch (rnd.Next(2))
             {
                 case 0:
+                    plane.flightState = FlightState.Departure;
                     proxy.Invoke("Departure", plane);
                     break;
                 case 1:
+                    plane.flightState = FlightState.Arrival;
                     proxy.Invoke("Arrival", plane);
                     break;
             }
@@ -111,6 +115,11 @@ namespace Simulator
         {
             int range = 120;
             return DateTime.Now.AddMinutes(rnd.Next(range));
+        }
+
+        public static int GetWaitingTime()
+        {
+            return rnd.Next(5000, 20000);
         }
     }
 }

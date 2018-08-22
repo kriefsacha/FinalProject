@@ -10,22 +10,24 @@ namespace BL
 {
     class StationManager
     {
-        ConcurrentQueue<TaskCompletionSource<bool>> queue = new ConcurrentQueue<TaskCompletionSource<bool>>();
+        public delegate void FinishedDelegate(StationManager sender, EventArgs e);
 
-        public async Task Do(Plane plane)
+        public event FinishedDelegate finishedEvent;
+
+        public int StationNumber { get; set; }
+
+        public bool isAvailable { get; set; }
+
+        public void Do(Plane plane)
         {
-            var mytcs = new TaskCompletionSource<bool>();
-            if (queue.TryDequeue(out var tcs))
+            isAvailable = false;
+
+            Task.Delay(plane.waitingTime).ContinueWith((task) =>
             {
-                queue.Enqueue(mytcs);
-                await tcs.Task;
-            }
+                isAvailable = true;
 
-            else queue.Enqueue(mytcs);
-
-            await Task.Delay(plane.waitingTime);
-
-            mytcs.SetResult(true);
+                finishedEvent.Invoke(this, EventArgs.Empty);
+            }).Wait();
         }
     }
 }

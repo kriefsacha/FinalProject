@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,10 @@ namespace Common
         public int waitingTime { get; set; }
 
         public DateTime ActionTime { get; set; }
+
+        public FlightState flightState { get; set; }
+
+        public Tuple<int,int> nextStations { get; set; }
 
     }
 }
