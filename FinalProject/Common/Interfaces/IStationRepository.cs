@@ -8,6 +8,6 @@ namespace Common.Interfaces
 {
     public interface IStationRepository
     {
-        void Init();
+        List<Station> GetCurrentStationsState();
     }
 }

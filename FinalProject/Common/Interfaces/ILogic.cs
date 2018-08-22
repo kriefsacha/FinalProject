@@ -8,7 +8,11 @@ namespace Common.Interfaces
 {
     public interface ILogic
     {
-        void Init();
+        List<Plane> GetFutureArrivals();
+
+        List<Plane> GetFutureDepartures();
+
+        List<Station> GetCurrentStationsState();
 
         void Departure(Plane Plane);
 

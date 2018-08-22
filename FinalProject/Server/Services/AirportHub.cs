@@ -17,21 +17,26 @@ namespace Server.Services
             this.logic = logic;
         }
 
-        public void Init()
-        {
 
+        public void GetInitialState()
+        {
+            var futureDepartures = logic.GetFutureDepartures();
+            var futureArrivals = logic.GetFutureArrivals();
+            var stationsState = logic.GetCurrentStationsState();
+
+            Clients.Caller.init(futureDepartures, futureArrivals , stationsState);
         }
 
         public void Departure(Plane Plane)
         {
             logic.Departure(Plane);
-            Clients.All.departure(Plane.ID);
+            Clients.All.departure(Plane);
         }
 
         public void Arrival(Plane Plane)
         {
             logic.Arrival(Plane);
-            Clients.All.arrival(Plane.ID);
+            Clients.All.arrival(Plane);
         }
 
         public void MoveRequest(Plane Plane)

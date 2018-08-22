@@ -23,5 +23,7 @@ namespace Common
 
         public int waitingTime { get; set; }
 
+        public DateTime ActionTime { get; set; }
+
     }
 }

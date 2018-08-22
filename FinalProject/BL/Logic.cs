@@ -33,9 +33,19 @@ namespace BL
             flightRepository.Departure(Plane);
         }
 
-        public void Init()
+        public List<Plane> GetFutureArrivals()
         {
-            
+            return flightRepository.GetFutureArrivals();
+        }
+
+        public List<Plane> GetFutureDepartures()
+        {
+            return flightRepository.GetFutureDepartures();
+        }
+
+        public List<Station> GetCurrentStationsState()
+        {
+            return stationRepository.GetCurrentStationsState();
         }
 
         public void MoveRequest(Plane Plane)

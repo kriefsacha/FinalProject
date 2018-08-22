@@ -11,5 +11,9 @@ namespace Common.Interfaces
         void Departure(Plane plane);
 
         void Arrival(Plane plane);
+
+        List<Plane> GetFutureArrivals();
+
+        List<Plane> GetFutureDepartures();
     }
 }
