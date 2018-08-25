@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -8,26 +9,65 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    class StationManager
+    public class StationManager : IDisposable
     {
-        public delegate void FinishedDelegate(StationManager sender, EventArgs e);
+        public event EventHandler TookNewPlane;
+        public event EventHandler PlaneFinished;
 
-        public event FinishedDelegate finishedEvent;
+        public StationManager(string queueKey, IQueueService queueService)
+        {
+            this.queueKey = queueKey;
+            On = true;
+
+            new Task(() =>
+            {
+                while (On)
+                {
+                    while (queueService.TryDequeue(queueKey, out Plane plane))
+                    {
+                        this.plane = plane;
+                        Do(plane);
+                    }
+                    Task.Delay(200).Wait();
+                }
+            }).Start();
+
+        }
+
+        public bool On { get; set; }
+
+        public string queueKey { get; set; }
 
         public int StationNumber { get; set; }
 
-        public bool isAvailable { get; set; }
+        public Plane plane { get; set; }
+
+        public bool isAvailable { get { return plane == null; } }
+
+
 
         public void Do(Plane plane)
         {
-            isAvailable = false;
+            plane.SetStation(StationNumber);
+            TookNewPlane.Invoke(plane, EventArgs.Empty);
 
-            Task.Delay(plane.waitingTime).ContinueWith((task) =>
+            plane.Moved += (sender, e) => {
+                if (sender != this.StationNumber) this.plane = null;
+            };
+
+            Task.Delay(plane.waitingTime).Wait();
+
+            PlaneFinished.Invoke(plane, EventArgs.Empty);
+
+            while (!isAvailable)
             {
-                isAvailable = true;
+                Task.Delay(200).Wait();
+            }
+        }
 
-                finishedEvent.Invoke(this, EventArgs.Empty);
-            }).Wait();
+        public void Dispose()
+        {
+            On = false;
         }
     }
 }

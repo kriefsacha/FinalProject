@@ -1,113 +1,169 @@
 ﻿using Common;
 using Common.Enums;
+using Common.Interfaces;
+using Microsoft.AspNet.SignalR;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace BL
 {
-    class AirportManager
+    public class AirportManager : IAirportManager
     {
         public List<StationManager> Stations { get; set; }
-        public List<Plane> waitingList { get; set; }
+        public List<WaitingModel> timersList { get; set; }
+        public IQueueService queueService { get; set; }
 
-        public AirportManager()
+        IFlightRepository flightRepository;
+        IPlaneRepository planeRepository;
+        IStationRepository stationRepository;
+
+        public AirportManager(IFlightRepository flightRepository,
+            IPlaneRepository planeRepository,
+            IStationRepository stationRepository ,IQueueService queueService)
         {
+            this.flightRepository = flightRepository;
+            this.planeRepository = planeRepository;
+            this.stationRepository = stationRepository;
+            this.queueService = queueService;
+
+            Stations = new List<StationManager>();
+
             for (int i = 0; i < 8; i++)
             {
-                Stations.Add(new StationManager() { StationNumber = i + 1, isAvailable = true });
-            }
+                if (i < 5)
+                    Stations.Add(new StationManager("S" + (i + 1), queueService) { StationNumber = i + 1 });
+                else if (i < 7)
+                    Stations.Add(new StationManager("S6", queueService) { StationNumber = i + 1 });
+                else
+                    Stations.Add(new StationManager("S" + i , queueService) { StationNumber = i + 1 });
 
-            waitingList = new List<Plane>();
-        }
-
-        public void Move(Plane plane)
-        {
-            if (plane.flightState == FlightState.Departure)
-            {
-                var nextStationNumbers = DepartureMovement(plane);
-                if (nextStationNumbers == null) return;
-                if (nextStationNumbers.Item2 == 0)
+                Stations[i].TookNewPlane += (sender, e) =>
                 {
-                    var nextStation = Stations.Where(s => s.StationNumber == nextStationNumbers.Item1).FirstOrDefault();
-                    if (nextStation != null)
+                    //GlobalHost.ConnectionManager.GetHubContext<AirportHub>()
+                };
+
+                Stations[i].PlaneFinished += (sender, e) =>
+                {
+                    if (sender is Plane plane)
                     {
-                        if (nextStation.isAvailable) nextStation.Do(plane);
+                        if (plane.flightState == FlightState.Arrival)
+                        {
+                            var nextStep = ArrivalMovement(plane);
+                            if (nextStep != null)
+                                queueService.EnQueue(nextStep, plane);
+                            else
+                                plane.FinishWay();
+                        }
                         else
                         {
-                            plane.nextStations = nextStationNumbers;
-                            waitingList.Add(plane);
-                            nextStation.finishedEvent += NextStation_finishedEvent;
+                            var nextStep = DepartureMovement(plane);
+                            if(nextStep != null)
+                            queueService.EnQueue(nextStep, plane);
+                            else
+                                plane.FinishWay();
                         }
                     }
-                    else return;
-                }
+                };
             }
 
-            else
-            {
-                var nextStationNumbers = ArrivalMovement(plane);
-                if (nextStationNumbers == null) return;
-                if (nextStationNumbers.Item2 == 0)
-                {
-                    var nextStation = Stations.Where(s => s.StationNumber == nextStationNumbers.Item1).FirstOrDefault();
-                    if (nextStation != null)
-                    {
-                        if (nextStation.isAvailable) nextStation.Do(plane);
-                        else
-                        {
-                            plane.nextStations = nextStationNumbers;
-                            waitingList.Add(plane);
-                            nextStation.finishedEvent += NextStation_finishedEvent;
-                        }
-                    }
-                    else return;
-                }
-            }
+            timersList = new List<WaitingModel>();
         }
 
-        private void NextStation_finishedEvent(StationManager sender, EventArgs e)
+
+        public void NewDepartureOrArrival(Plane Plane)
         {
-            var waitingPlane = waitingList.FirstOrDefault(plane => plane.nextStations.Item1 == sender.StationNumber
-             || plane.nextStations.Item2 == sender.StationNumber);
+            if (Plane.flightState == FlightState.Arrival) flightRepository.Arrival(Plane);
+            else flightRepository.Departure(Plane);
+            WaitingModel waitingModel = new WaitingModel();
+            waitingModel.plane = Plane;
+            Timer timer = new Timer();
+            timer.Elapsed += Timer_Elapsed;
+            var interval = Plane.ActionTime.Subtract(DateTime.Now);
+            timer.Interval = interval.TotalMilliseconds; 
+            waitingModel.timer = timer;
+            timer.Start();
+            timersList.Add(waitingModel);
+        }
 
-            if(waitingPlane != null)
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if(sender is Timer timer)
             {
-                waitingList.Remove(waitingPlane);
-                sender.Do(waitingPlane);
+                timer.Stop();
+                var model = timersList.Where(m => m.timer == timer).FirstOrDefault();
+
+                if(model != null)
+                {
+                    if(model.plane.flightState == FlightState.Arrival)
+                    {
+                        var nextStep = ArrivalMovement(model.plane);
+                        queueService.EnQueue(nextStep, model.plane);
+                    }
+                    else
+                    {
+                        var nextStep = DepartureMovement(model.plane);
+                        queueService.EnQueue(nextStep, model.plane);
+                    }
+
+                    timersList.Remove(model);
+                }
             }
         }
 
-        public Tuple<int, int> DepartureMovement(Plane plane)
+        public string DepartureMovement(Plane plane)
         {
             switch (plane.StationNumber)
             {
-                case 0: return new Tuple<int, int>(6, 7);
-                case 4: return new Tuple<int, int>(0, 0);
-                case 6: return new Tuple<int, int>(8, 0);
-                case 7: return new Tuple<int, int>(8, 0);
-                case 8: return new Tuple<int, int>(4, 0);
+                case 0: return "S6";
+                case 4: return null;
+                case 6: return "S7";
+                case 7: return "S7";
+                case 8: return "S4";
                 default: return null;
             }
         }
 
-        public Tuple<int, int> ArrivalMovement(Plane plane)
+        public string ArrivalMovement(Plane plane)
         {
             switch (plane.StationNumber)
             {
-                case 0: return new Tuple<int, int>(1, 0);
-                case 1: return new Tuple<int, int>(2, 0);
-                case 2: return new Tuple<int, int>(3, 0);
-                case 3: return new Tuple<int, int>(4, 0);
-                case 4: return new Tuple<int, int>(5, 0);
-                case 5: return new Tuple<int, int>(6, 7);
-                case 6: return new Tuple<int, int>(0, 0);
-                case 7: return new Tuple<int, int>(0, 0);
+                case 0: return "S1";
+                case 1: return "S2";
+                case 2: return "S3";
+                case 3: return "S4";
+                case 4: return "S5";
+                case 5: return "S6";
+                case 6: return null;
+                case 7: return null;
                 default: return null;
             }
         }
 
+        public List<Plane> GetFutureArrivals()
+        {
+            return flightRepository.GetFutureArrivals();
+        }
+
+        public List<Plane> GetFutureDepartures()
+        {
+            return flightRepository.GetFutureDepartures();
+        }
+
+        public List<Station> GetCurrentStationsState()
+        {
+            return stationRepository.GetCurrentStationsState();
+        }
+
+    }
+
+    public class WaitingModel
+    {
+        public Timer timer { get; set; }
+        public Plane plane { get; set; }
     }
 }

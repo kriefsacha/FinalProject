@@ -28,7 +28,19 @@ namespace Common
 
         public FlightState flightState { get; set; }
 
-        public Tuple<int,int> nextStations { get; set; }
+        public void SetStation(int id)
+        {
+            _stationNumber = id;
+            Moved?.Invoke(id, EventArgs.Empty);
+        }
+
+        public void FinishWay()
+        {
+            Moved?.Invoke(0, EventArgs.Empty);
+        }
+        public delegate void MovedHandler (int senderId, EventArgs e);
+
+        public event MovedHandler Moved;
 
     }
 }
