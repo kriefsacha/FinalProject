@@ -10,3 +10,5 @@ C:\Users\krief\Documents\GitHub\FinalProject\FinalProject\ClientTest\obj\Debug\C
 C:\Users\krief\Documents\GitHub\FinalProject\FinalProject\ClientTest\obj\Debug\ClientTest.csproj.CopyComplete
 C:\Users\krief\Documents\GitHub\FinalProject\FinalProject\ClientTest\obj\Debug\ClientTest.exe
 C:\Users\krief\Documents\GitHub\FinalProject\FinalProject\ClientTest\obj\Debug\ClientTest.pdb
+C:\Users\krief\Documents\GitHub\FinalProject\FinalProject\ClientTest\bin\Debug\Microsoft.AspNet.SignalR.Client.dll
+C:\Users\krief\Documents\GitHub\FinalProject\FinalProject\ClientTest\bin\Debug\Microsoft.AspNet.SignalR.Client.xml

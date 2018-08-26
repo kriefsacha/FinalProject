@@ -23,7 +23,7 @@ namespace Simulator
             Console.WriteLine("--------------------------------------------------------------" + Environment.NewLine);
             rnd = new Random();
 
-            Timer timer = new Timer(2000);
+            Timer timer = new Timer(30000);
             timer.Elapsed += Timer_Elapsed;
             timer.Start();
 
@@ -41,18 +41,22 @@ namespace Simulator
             plane.waitingTime = GetWaitingTime();
 
             HttpClient httpClient = new HttpClient();
-            string json = JsonConvert.SerializeObject(plane);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             switch (rnd.Next(2))
             {
                 case 0:
+                    Console.WriteLine("Sending plane " + plane.ID + " to departure in : " + plane.ActionTime + " who will wait in all stations " + plane.waitingTime / 1000 + " seconds");
                     plane.flightState = FlightState.Departure;
-                    httpClient.PostAsync("http://localhost:63938/api/airport/Departure",httpContent).Wait();
+                    string jsond = JsonConvert.SerializeObject(plane);
+                    var httpContentd = new StringContent(jsond, Encoding.UTF8, "application/json");
+                    httpClient.PostAsync("http://localhost:63938/api/airport/Departure",httpContentd).Wait();
                     break;
                 case 1:
+                    Console.WriteLine("Sending plane " + plane.ID + " to arrival in : " + plane.ActionTime + " who will wait in all stations " + plane.waitingTime / 1000 + " seconds");
                     plane.flightState = FlightState.Arrival;
-                    httpClient.PostAsync("http://localhost:63938/api/airport/Arrival", httpContent).Wait();
+                    string jsona = JsonConvert.SerializeObject(plane);
+                    var httpContenta = new StringContent(jsona, Encoding.UTF8, "application/json");
+                    httpClient.PostAsync("http://localhost:63938/api/airport/Arrival", httpContenta).Wait();
                     break;
             }
         }
@@ -70,13 +74,13 @@ namespace Simulator
 
         public static DateTime GetActionTime()
         {
-            int range = 120;
-            return DateTime.Now.AddMinutes(rnd.Next(range));
+            int range = 3;
+            return DateTime.Now.AddMinutes(rnd.Next(1,range));
         }
 
         public static int GetWaitingTime()
         {
-            return rnd.Next(5000, 20000);
+            return rnd.Next(4000, 10000);
         }
     }
 }

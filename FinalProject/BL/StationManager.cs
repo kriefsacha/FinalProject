@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using BL.Interfaces;
+using Common;
 using Common.Interfaces;
 using System;
 using System.Collections.Concurrent;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public class StationManager : IDisposable
+    public class StationManager : IStationManager , IDisposable
     {
         public event EventHandler TookNewPlane;
         public event EventHandler PlaneFinished;
@@ -43,8 +44,6 @@ namespace BL
         public Plane plane { get; set; }
 
         public bool isAvailable { get { return plane == null; } }
-
-
 
         public void Do(Plane plane)
         {

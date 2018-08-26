@@ -1,7 +1,6 @@
 ﻿using Common;
 using Common.Enums;
 using Common.Interfaces;
-using Microsoft.AspNet.SignalR;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -12,25 +11,23 @@ using System.Timers;
 
 namespace BL
 {
-    public class AirportManager : IAirportManager
+    public class AirportManager : IAirportManager , IDisposable
     {
         public List<StationManager> Stations { get; set; }
-        public List<WaitingModel> timersList { get; set; }
-        public IQueueService queueService { get; set; }
+        List<WaitingModel> waitingList { get; set; }
+        IQueueService queueService { get; set; }
+        public event EventHandler planeMoved;
+        Dictionary<int, string> arrivalSteps;
+        Dictionary<int, string> departureSteps;
 
-        IFlightRepository flightRepository;
-        IPlaneRepository planeRepository;
-        IStationRepository stationRepository;
-
-        public AirportManager(IFlightRepository flightRepository,
-            IPlaneRepository planeRepository,
-            IStationRepository stationRepository ,IQueueService queueService)
+        public AirportManager(IQueueService queueService)
         {
-            this.flightRepository = flightRepository;
-            this.planeRepository = planeRepository;
-            this.stationRepository = stationRepository;
             this.queueService = queueService;
+            Initialize();
+        }
 
+        private void Initialize()
+        {
             Stations = new List<StationManager>();
 
             for (int i = 0; i < 8; i++)
@@ -40,11 +37,11 @@ namespace BL
                 else if (i < 7)
                     Stations.Add(new StationManager("S6", queueService) { StationNumber = i + 1 });
                 else
-                    Stations.Add(new StationManager("S" + i , queueService) { StationNumber = i + 1 });
+                    Stations.Add(new StationManager("S" + i, queueService) { StationNumber = i + 1 });
 
                 Stations[i].TookNewPlane += (sender, e) =>
                 {
-                    //GlobalHost.ConnectionManager.GetHubContext<AirportHub>()
+                    planeMoved.Invoke(sender, e);
                 };
 
                 Stations[i].PlaneFinished += (sender, e) =>
@@ -57,108 +54,98 @@ namespace BL
                             if (nextStep != null)
                                 queueService.EnQueue(nextStep, plane);
                             else
+                            {
                                 plane.FinishWay();
+                                planeMoved.Invoke(plane, e);
+                            }
                         }
                         else
                         {
                             var nextStep = DepartureMovement(plane);
-                            if(nextStep != null)
-                            queueService.EnQueue(nextStep, plane);
+                            if (nextStep != null)
+                                queueService.EnQueue(nextStep, plane);
                             else
+                            {
                                 plane.FinishWay();
+                                planeMoved.Invoke(plane, e);
+                            }
                         }
                     }
                 };
             }
 
-            timersList = new List<WaitingModel>();
-        }
+            waitingList = new List<WaitingModel>();
 
+            arrivalSteps = new Dictionary<int, string>();
+            arrivalSteps.Add(0, "S1");
+            arrivalSteps.Add(1, "S2");
+            arrivalSteps.Add(2, "S3");
+            arrivalSteps.Add(3, "S4");
+            arrivalSteps.Add(4, "S5");
+            arrivalSteps.Add(5, "S6");
+            arrivalSteps.Add(6, null);
+            arrivalSteps.Add(7, null);
+
+            departureSteps = new Dictionary<int, string>();
+            departureSteps.Add(0, "S6");
+            departureSteps.Add(4, null);
+            departureSteps.Add(6, "S7");
+            departureSteps.Add(7, "S7");
+            departureSteps.Add(8, "S4");
+        }
 
         public void NewDepartureOrArrival(Plane Plane)
         {
-            if (Plane.flightState == FlightState.Arrival) flightRepository.Arrival(Plane);
-            else flightRepository.Departure(Plane);
             WaitingModel waitingModel = new WaitingModel();
             waitingModel.plane = Plane;
             Timer timer = new Timer();
             timer.Elapsed += Timer_Elapsed;
             var interval = Plane.ActionTime.Subtract(DateTime.Now);
-            timer.Interval = interval.TotalMilliseconds; 
+            timer.Interval = interval.TotalMilliseconds;
             waitingModel.timer = timer;
             timer.Start();
-            timersList.Add(waitingModel);
+            waitingList.Add(waitingModel);
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if(sender is Timer timer)
+            if (sender is Timer timer)
             {
                 timer.Stop();
-                var model = timersList.Where(m => m.timer == timer).FirstOrDefault();
+                var model = waitingList.Where(m => m.timer == timer).FirstOrDefault();
 
-                if(model != null)
+                if (model != null)
                 {
-                    if(model.plane.flightState == FlightState.Arrival)
-                    {
-                        var nextStep = ArrivalMovement(model.plane);
-                        queueService.EnQueue(nextStep, model.plane);
-                    }
-                    else
-                    {
-                        var nextStep = DepartureMovement(model.plane);
-                        queueService.EnQueue(nextStep, model.plane);
-                    }
+                    string nextStep = "";
 
-                    timersList.Remove(model);
+                    if (model.plane.flightState == FlightState.Arrival) nextStep = ArrivalMovement(model.plane);
+
+                    else nextStep = DepartureMovement(model.plane);
+
+                    queueService.EnQueue(nextStep, model.plane);
+
+                    waitingList.Remove(model);
                 }
             }
         }
 
         public string DepartureMovement(Plane plane)
         {
-            switch (plane.StationNumber)
-            {
-                case 0: return "S6";
-                case 4: return null;
-                case 6: return "S7";
-                case 7: return "S7";
-                case 8: return "S4";
-                default: return null;
-            }
+            return departureSteps[plane.StationNumber];
         }
 
         public string ArrivalMovement(Plane plane)
         {
-            switch (plane.StationNumber)
+            return arrivalSteps[plane.StationNumber];
+        }
+
+        public void Dispose()
+        {
+            foreach (var station in Stations)
             {
-                case 0: return "S1";
-                case 1: return "S2";
-                case 2: return "S3";
-                case 3: return "S4";
-                case 4: return "S5";
-                case 5: return "S6";
-                case 6: return null;
-                case 7: return null;
-                default: return null;
+                station.Dispose();
             }
         }
-
-        public List<Plane> GetFutureArrivals()
-        {
-            return flightRepository.GetFutureArrivals();
-        }
-
-        public List<Plane> GetFutureDepartures()
-        {
-            return flightRepository.GetFutureDepartures();
-        }
-
-        public List<Station> GetCurrentStationsState()
-        {
-            return stationRepository.GetCurrentStationsState();
-        }
-
     }
 
     public class WaitingModel

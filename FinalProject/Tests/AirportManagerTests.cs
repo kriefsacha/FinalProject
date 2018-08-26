@@ -23,12 +23,7 @@ namespace Tests
         {
             var plane = new Plane() { StationNumber = stationNumber };
 
-            var mock1 = new Mock<IFlightRepository>();
-            var mock2 = new Mock<IPlaneRepository>();
-            var mock3 = new Mock<IStationRepository>();
-            var mock4 = new Mock<IQueueService>();
-
-            var airport = new AirportManager(mock1.Object, mock2.Object, mock3.Object, mock4.Object);
+            var airport = new AirportManager(new QueueService());
 
             var res = airport.DepartureMovement(plane);
             //var mock = new Mock<IAirportManager>();
@@ -50,12 +45,7 @@ namespace Tests
         {
             var plane = new Plane() { StationNumber = stationNumber };
 
-            var mock1 = new Mock<IFlightRepository>();
-            var mock2 = new Mock<IPlaneRepository>();
-            var mock3 = new Mock<IStationRepository>();
-            var mock4 = new Mock<IQueueService>();
-
-            var airport = new AirportManager(mock1.Object, mock2.Object, mock3.Object, mock4.Object);
+            var airport = new AirportManager(new QueueService());
 
             var res = airport.ArrivalMovement(plane);
             //var mock = new Mock<IAirportManager>();
@@ -67,11 +57,7 @@ namespace Tests
         [Fact]
         public void NewDepartureOrArrival_ArrivalTest()
         {
-            var mock1 = new Mock<IFlightRepository>();
-            var mock2 = new Mock<IPlaneRepository>();
-            var mock3 = new Mock<IStationRepository>();
-
-            var airport = new AirportManager(mock1.Object, mock2.Object, mock3.Object, new QueueService());
+            var airport = new AirportManager(new QueueService());
 
             var plane = new Plane()
             {
@@ -90,11 +76,7 @@ namespace Tests
         [Fact]
         public void NewDepartureOrArrival_DepartureTest()
         {
-            var mock1 = new Mock<IFlightRepository>();
-            var mock2 = new Mock<IPlaneRepository>();
-            var mock3 = new Mock<IStationRepository>();
-
-            var airport = new AirportManager(mock1.Object, mock2.Object, mock3.Object, new QueueService());
+            var airport = new AirportManager(new QueueService());
 
             var plane = new Plane()
             {

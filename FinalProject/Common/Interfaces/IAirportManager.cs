@@ -11,8 +11,6 @@ namespace Common.Interfaces
         void NewDepartureOrArrival(Plane Plane);
         string DepartureMovement(Plane plane);
         string ArrivalMovement(Plane plane);
-        List<Plane> GetFutureArrivals();
-        List<Plane> GetFutureDepartures();
-        List<Station> GetCurrentStationsState();
+        event EventHandler planeMoved;
     }
 }

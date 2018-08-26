@@ -120,6 +120,10 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IDalService.cs" />
+    <Compile Include="Interfaces\IHubService.cs" />
+    <Compile Include="Interfaces\IManager.cs" />
+    <Compile Include="Manager.cs" />
     <Compile Include="Services\AirportHub.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AirportController.cs" />
@@ -127,6 +131,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\DalService.cs" />
+    <Compile Include="Services\HubService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

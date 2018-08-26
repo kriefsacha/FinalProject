@@ -44,7 +44,6 @@
     <Compile Include="Interfaces\IAirportManager.cs" />
     <Compile Include="Interfaces\IFlightRepository.cs" />
     <Compile Include="Interfaces\IPlaneRepository.cs" />
-    <Compile Include="Interfaces\IQueueService.cs" />
     <Compile Include="Interfaces\IStationRepository.cs" />
     <Compile Include="Plane.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

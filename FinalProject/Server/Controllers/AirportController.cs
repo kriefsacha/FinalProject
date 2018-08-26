@@ -11,40 +11,76 @@ namespace Server.Controllers
 {
     public class AirportController : ApiController
     {
-        IAirportManager airport;
-        public AirportController(IAirportManager airport)
+        IManager manager;
+        public AirportController(IManager manager)
         {
-            this.airport = airport;
+            this.manager = manager;
         }
 
         [HttpPost]
         public void Arrival(Plane Plane)
         {
-            airport.NewDepartureOrArrival(Plane);
+            manager.Departure(Plane);
         }
 
         [HttpPost]
         public void Departure(Plane Plane)
         {
-            airport.NewDepartureOrArrival(Plane);
+            manager.Arrival(Plane);
         }
 
         [HttpGet]
         public List<Plane> GetFutureArrivals()
         {
-            return airport.GetFutureArrivals();
+            try
+            {
+                return manager.GetFutureArrivals();
+            }
+            catch (Exception exc)
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(exc.Message)
+                };
+
+                throw new HttpResponseException(resp);
+            }
         }
 
         [HttpGet]
         public List<Plane> GetFutureDepartures()
         {
-            return airport.GetFutureDepartures();
+            try
+            {
+                return manager.GetFutureDepartures();
+            }
+            catch (Exception exc)
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(exc.Message)
+                };
+
+                throw new HttpResponseException(resp);
+            }
         }
 
         [HttpGet]
         public List<Station> GetCurrentStationsState()
         {
-            return airport.GetCurrentStationsState();
+            try
+            {
+                return manager.GetCurrentStationsState();
+            }
+            catch (Exception exc)
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(exc.Message)
+                };
+
+                throw new HttpResponseException(resp);
+            }
         }
     }
 }

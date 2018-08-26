@@ -17,8 +17,20 @@ namespace Common
         {
             get { return _stationNumber; }
             set {
-                if(value > 0 && value < 9)
+                //if(value > 0 && value < 9)
                 _stationNumber = value;
+            }
+        }
+
+        private int _previousstationNumber;
+
+        public int PreviousStationNumber
+        {
+            get { return _previousstationNumber; }
+            set
+            {
+                //if(value > 0 && value < 9)
+                _previousstationNumber = value;
             }
         }
 
@@ -30,13 +42,14 @@ namespace Common
 
         public void SetStation(int id)
         {
-            _stationNumber = id;
+            PreviousStationNumber = StationNumber;
+            StationNumber = id;
             Moved?.Invoke(id, EventArgs.Empty);
         }
 
         public void FinishWay()
         {
-            Moved?.Invoke(0, EventArgs.Empty);
+            SetStation(0);
         }
         public delegate void MovedHandler (int senderId, EventArgs e);
 

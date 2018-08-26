@@ -2,6 +2,7 @@
 using BL.Storage;
 using Common.Interfaces;
 using DAL.Repositories;
+using Server.Services;
 using SimpleInjector;
 using SimpleInjector.Integration.WebApi;
 using SimpleInjector.Lifestyles;
@@ -22,11 +23,15 @@ namespace Server
             container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
 
             // Register your types, for instance using the scoped lifestyle:
-            container.Register<IPlaneRepository, PlaneRepository>(Lifestyle.Scoped);
-            container.Register<IStationRepository, StationRepository>(Lifestyle.Scoped);
-            container.Register<IFlightRepository, FlightRepository>(Lifestyle.Scoped);
-            container.Register<IQueueService, QueueService>(Lifestyle.Scoped);
-            container.Register<IAirportManager, AirportManager>(Lifestyle.Scoped);
+            container.Register<IPlaneRepository, PlaneRepository>(Lifestyle.Singleton);
+            container.Register<IStationRepository, StationRepository>(Lifestyle.Singleton);
+            container.Register<IFlightRepository, FlightRepository>(Lifestyle.Singleton);
+            container.Register<IQueueService, QueueService>(Lifestyle.Singleton);
+            container.Register<IAirportManager, AirportManager>(Lifestyle.Singleton);
+            container.Register<IDalService, DalService>(Lifestyle.Singleton);
+            container.Register<IHubService, HubService>(Lifestyle.Singleton);
+            container.Register<IManager, Manager>(Lifestyle.Singleton);
+
 
             // This is an extension method from the integration package.
             container.RegisterWebApiControllers(GlobalConfiguration.Configuration);
