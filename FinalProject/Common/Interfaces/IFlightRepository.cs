@@ -8,12 +8,8 @@ namespace Common.Interfaces
 {
     public interface IFlightRepository
     {
-        void Departure(Plane plane);
+        void DepartureOrArrival(Plane plane);
 
-        void Arrival(Plane plane);
-
-        List<Plane> GetFutureArrivals();
-
-        List<Plane> GetFutureDepartures();
+        List<Plane> GetFutureDeparturesAndArrivals();
     }
 }

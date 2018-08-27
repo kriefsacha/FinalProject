@@ -9,7 +9,7 @@ namespace Common
 {
     public class Plane
     {
-        public string ID { get; set; }
+        public string Name { get; set; }
 
         private int _stationNumber;
 

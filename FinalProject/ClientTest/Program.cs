@@ -62,16 +62,22 @@ namespace ClientTest
             HubConnection hubConnection = new HubConnection("http://localhost:63938");
             var proxy = hubConnection.CreateHubProxy("AirportHub");
             proxy.On<Plane>("moved", Moved);
+            proxy.On<Plane>("departureOrArrival", DepartureOrArrival);
             hubConnection.Start();
             Console.ReadLine();
+        }
+
+        private static void DepartureOrArrival(Plane obj)
+        {
+            Console.WriteLine($"Plane {obj.Name} was added to {obj.flightState} , he will do it at : {obj.ActionTime} ");
         }
 
         private static void Moved(Plane obj)
         {
             if (obj.StationNumber != 0)
-                Console.WriteLine(obj.ID + " Moved to station " + obj.StationNumber);
+                Console.WriteLine(obj.Name + " Moved to station " + obj.StationNumber);
             else
-                Console.WriteLine(obj.ID + " is out the airport ! ");
+                Console.WriteLine(obj.Name + " is out the airport ! ");
         }
     }
 }

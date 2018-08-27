@@ -11,72 +11,66 @@ using System.Timers;
 
 namespace BL
 {
-    public class AirportManager : IAirportManager , IDisposable
+    public class AirportManager : IAirportManager, IDisposable
     {
         public List<StationManager> Stations { get; set; }
         List<WaitingModel> waitingList { get; set; }
         IQueueService queueService { get; set; }
+        IStationRepository stationRepository { get; set; }
         public event EventHandler planeMoved;
         Dictionary<int, string> arrivalSteps;
         Dictionary<int, string> departureSteps;
 
-        public AirportManager(IQueueService queueService)
+        public AirportManager(IQueueService queueService , IStationRepository stationRepository)
         {
             this.queueService = queueService;
+            this.stationRepository = stationRepository;
             Initialize();
         }
 
         private void Initialize()
         {
             Stations = new List<StationManager>();
+            waitingList = new List<WaitingModel>();
+            arrivalSteps = new Dictionary<int, string>();
+            departureSteps = new Dictionary<int, string>();
 
-            for (int i = 0; i < 8; i++)
+            var dalStations = stationRepository.GetCurrentStationsState();
+
+            foreach (var station in dalStations)
             {
-                if (i < 5)
-                    Stations.Add(new StationManager("S" + (i + 1), queueService) { StationNumber = i + 1 });
-                else if (i < 7)
-                    Stations.Add(new StationManager("S6", queueService) { StationNumber = i + 1 });
-                else
-                    Stations.Add(new StationManager("S" + i, queueService) { StationNumber = i + 1 });
+                var stationManager = new StationManager(station.stepKey, station.Number, queueService);
 
-                Stations[i].TookNewPlane += (sender, e) =>
+                stationManager.TookNewPlane += (sender, e) =>
                 {
                     planeMoved.Invoke(sender, e);
                 };
 
-                Stations[i].PlaneFinished += (sender, e) =>
+                stationManager.PlaneFinished += (sender, e) =>
                 {
                     if (sender is Plane plane)
                     {
+                        var nextStep = "";
+
                         if (plane.flightState == FlightState.Arrival)
-                        {
-                            var nextStep = ArrivalMovement(plane);
-                            if (nextStep != null)
-                                queueService.EnQueue(nextStep, plane);
-                            else
-                            {
-                                plane.FinishWay();
-                                planeMoved.Invoke(plane, e);
-                            }
-                        }
+                            nextStep = ArrivalMovement(plane);
+                        else
+                            nextStep = DepartureMovement(plane);
+
+                        if (nextStep != null)
+                            queueService.EnQueue(nextStep, plane);
                         else
                         {
-                            var nextStep = DepartureMovement(plane);
-                            if (nextStep != null)
-                                queueService.EnQueue(nextStep, plane);
-                            else
-                            {
-                                plane.FinishWay();
-                                planeMoved.Invoke(plane, e);
-                            }
+                            plane.FinishWay();
+                            planeMoved.Invoke(plane, e);
                         }
                     }
                 };
+
+                Stations.Add(stationManager);
             }
 
-            waitingList = new List<WaitingModel>();
 
-            arrivalSteps = new Dictionary<int, string>();
             arrivalSteps.Add(0, "S1");
             arrivalSteps.Add(1, "S2");
             arrivalSteps.Add(2, "S3");
@@ -86,7 +80,6 @@ namespace BL
             arrivalSteps.Add(6, null);
             arrivalSteps.Add(7, null);
 
-            departureSteps = new Dictionary<int, string>();
             departureSteps.Add(0, "S6");
             departureSteps.Add(4, null);
             departureSteps.Add(6, "S7");
@@ -98,12 +91,14 @@ namespace BL
         {
             WaitingModel waitingModel = new WaitingModel();
             waitingModel.plane = Plane;
+
             Timer timer = new Timer();
             timer.Elapsed += Timer_Elapsed;
             var interval = Plane.ActionTime.Subtract(DateTime.Now);
             timer.Interval = interval.TotalMilliseconds;
             waitingModel.timer = timer;
             timer.Start();
+
             waitingList.Add(waitingModel);
         }
 
@@ -139,6 +134,12 @@ namespace BL
             return arrivalSteps[plane.StationNumber];
         }
 
+        public void AddStation(Station station)
+        {
+            Stations.Add(new StationManager(station.stepKey, station.Number, queueService));
+            queueService.Add(station.stepKey);
+        }
+
         public void Dispose()
         {
             foreach (var station in Stations)
@@ -146,6 +147,8 @@ namespace BL
                 station.Dispose();
             }
         }
+
+
     }
 
     public class WaitingModel

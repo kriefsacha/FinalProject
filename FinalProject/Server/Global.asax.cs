@@ -40,6 +40,7 @@ namespace Server
 
             GlobalConfiguration.Configuration.DependencyResolver =
                 new SimpleInjectorWebApiDependencyResolver(container);
+
             GlobalConfiguration.Configure(WebApiConfig.Register);
         }
     }

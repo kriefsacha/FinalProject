@@ -10,43 +10,22 @@ namespace DAL.Repositories
 {
     public class FlightRepository : IFlightRepository
     {
-        public void Departure(Plane plane)
+        public void DepartureOrArrival(Plane plane)
         {
             using (AirportDataModel context = new AirportDataModel())
             {
-                context.Departures.Add(new Departure() { PlaneId = plane.ID, DatePlanned = plane.ActionTime });
+                if (plane.flightState == Common.Enums.FlightState.Departure)
+                    context.Departures.Add(new Departure() { PlaneId = plane.Name, DatePlanned = plane.ActionTime });
+                else
+                    context.Arrivals.Add(new Arrival() { PlaneId = plane.Name, DatePlanned = plane.ActionTime });
+
                 context.SaveChanges();
             }
         }
 
-        public void Arrival(Plane plane)
+        public List<Plane> GetFutureDeparturesAndArrivals()
         {
-            using (AirportDataModel context = new AirportDataModel())
-            {
-                context.Arrivals.Add(new Arrival() { PlaneId = plane.ID, DatePlanned = plane.ActionTime });
-                context.SaveChanges();
-            }
-        }
-
-        public List<Plane> GetFutureArrivals()
-        {
-            List<Plane> FutureArrivals = new List<Plane>();
-
-            using (AirportDataModel context = new AirportDataModel())
-            {
-                var DalFutureArrivals = context.Arrivals.Where(a => a.DatePlanned > DateTime.Now).OrderBy(a=>a.DatePlanned).ToList();
-
-                foreach (var futureArrival in DalFutureArrivals)
-                {
-                    FutureArrivals.Add(new Plane { ActionTime = futureArrival.DatePlanned, ID = futureArrival.PlaneId });
-                }
-            }
-            return FutureArrivals;
-        }
-
-        public List<Plane> GetFutureDepartures()
-        {
-            List<Plane> FutureDepartures = new List<Plane>();
+            List<Plane> FutureDeparturesAndArrivals = new List<Plane>();
 
             using (AirportDataModel context = new AirportDataModel())
             {
@@ -54,11 +33,17 @@ namespace DAL.Repositories
 
                 foreach (var futureDeparture in DalFutureDepartures)
                 {
-                    FutureDepartures.Add(new Plane { ActionTime = futureDeparture.DatePlanned, ID = futureDeparture.PlaneId });
+                    FutureDeparturesAndArrivals.Add(new Plane { ActionTime = futureDeparture.DatePlanned, Name = futureDeparture.PlaneId , flightState = Common.Enums.FlightState.Departure });
+                }
+
+                var DalFutureArrivals = context.Arrivals.Where(a => a.DatePlanned > DateTime.Now).OrderBy(a => a.DatePlanned).ToList();
+
+                foreach (var futureArrival in DalFutureArrivals)
+                {
+                    FutureDeparturesAndArrivals.Add(new Plane { ActionTime = futureArrival.DatePlanned, Name = futureArrival.PlaneId  , flightState = Common.Enums.FlightState.Arrival});
                 }
             }
-            return FutureDepartures;
-
+            return FutureDeparturesAndArrivals;
         }
     }
 }

@@ -15,9 +15,10 @@ namespace BL
         public event EventHandler TookNewPlane;
         public event EventHandler PlaneFinished;
 
-        public StationManager(string queueKey, IQueueService queueService)
+        public StationManager(string queueKey, int number , IQueueService queueService)
         {
-            this.queueKey = queueKey;
+            StationNumber = number;
+
             On = true;
 
             new Task(() =>
@@ -36,8 +37,6 @@ namespace BL
         }
 
         public bool On { get; set; }
-
-        public string queueKey { get; set; }
 
         public int StationNumber { get; set; }
 

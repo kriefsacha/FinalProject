@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BL;
 using BL.Storage;
@@ -23,12 +24,17 @@ namespace Tests
         {
             var plane = new Plane() { StationNumber = stationNumber };
 
-            var airport = new AirportManager(new QueueService());
+            var queuemock = new Mock<IQueueService>();
+            var stationmock = new Mock<IStationRepository>();
+            //var airport = new AirportManager(new QueueService());
+
+            var airport = new AirportManager(queuemock.Object, stationmock.Object);
 
             var res = airport.DepartureMovement(plane);
             //var mock = new Mock<IAirportManager>();
             //mock.Setup(x => x.DepartureMovement(plane)).Returns("S6");
             //var res = mock.Object.DepartureMovement(plane);
+            //Xunit.Assert.Equal(res, "S6");
             Xunit.Assert.Equal(res, result);
         }
 
@@ -45,19 +51,24 @@ namespace Tests
         {
             var plane = new Plane() { StationNumber = stationNumber };
 
-            var airport = new AirportManager(new QueueService());
+            var queuemock = new Mock<IQueueService>();
+            var stationmock = new Mock<IStationRepository>();
+            //var airport = new AirportManager(new QueueService());
+
+            var airport = new AirportManager(queuemock.Object, stationmock.Object);
 
             var res = airport.ArrivalMovement(plane);
-            //var mock = new Mock<IAirportManager>();
-            //mock.Setup(x => x.DepartureMovement(plane)).Returns("S6");
-            //var res = mock.Object.DepartureMovement(plane);
+
             Xunit.Assert.Equal(res, result);
         }
 
         [Fact]
         public void NewDepartureOrArrival_ArrivalTest()
         {
-            var airport = new AirportManager(new QueueService());
+            var stationmock = new Mock<IStationRepository>();
+            //var airport = new AirportManager(new QueueService());
+
+            var airport = new AirportManager(new QueueService(), stationmock.Object);
 
             var plane = new Plane()
             {
@@ -76,7 +87,10 @@ namespace Tests
         [Fact]
         public void NewDepartureOrArrival_DepartureTest()
         {
-            var airport = new AirportManager(new QueueService());
+            var stationmock = new Mock<IStationRepository>();
+            //var airport = new AirportManager(new QueueService());
+
+            var airport = new AirportManager(new QueueService(), stationmock.Object);
 
             var plane = new Plane()
             {
@@ -90,6 +104,21 @@ namespace Tests
             Task.Delay(30000).Wait();
 
             Xunit.Assert.True(airport.Stations[5].plane == plane || airport.Stations[6].plane == plane);
+        }
+
+        [Fact]
+        public void AddStationTest()
+        {
+            var stationmock = new Mock<IStationRepository>();
+            //var airport = new AirportManager(new QueueService());
+
+            var airport = new AirportManager(new QueueService(), stationmock.Object);
+
+            var station = new Station(10, "S9");
+
+            airport.AddStation(station);
+
+            Xunit.Assert.True(airport.Stations.Where(s => s.StationNumber == 10).FirstOrDefault() != null);
         }
 
         //[Fact]

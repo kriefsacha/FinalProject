@@ -11,7 +11,7 @@ namespace BL.Storage
 {
     public class QueueService : IQueueService
     {
-        public Dictionary<string, ConcurrentQueue<Plane>> queuesSteps;
+        Dictionary<string, ConcurrentQueue<Plane>> queuesSteps;
 
         public QueueService()
         {
@@ -21,9 +21,8 @@ namespace BL.Storage
             queuesSteps.Add("S3", new ConcurrentQueue<Plane>());
             queuesSteps.Add("S4", new ConcurrentQueue<Plane>());
             queuesSteps.Add("S5", new ConcurrentQueue<Plane>());
-            queuesSteps.Add("S6", new ConcurrentQueue<Plane>());
-            queuesSteps.Add("S7", new ConcurrentQueue<Plane>());
-
+            queuesSteps.Add("S6", new ConcurrentQueue<Plane>()); //6 7
+            queuesSteps.Add("S7", new ConcurrentQueue<Plane>()); //8
         }
 
         public bool TryDequeue(string key, out Plane plane)
@@ -34,6 +33,11 @@ namespace BL.Storage
         public void EnQueue(string key, Plane plane)
         {
             queuesSteps[key].Enqueue(plane);
+        }
+
+        public void Add(string key)
+        {
+            queuesSteps.Add(key, new ConcurrentQueue<Plane>());
         }
     }
 }

@@ -18,41 +18,17 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public void Arrival(Plane Plane)
+        public void DepartureOrArrival(Plane Plane)
         {
-            manager.Departure(Plane);
-        }
-
-        [HttpPost]
-        public void Departure(Plane Plane)
-        {
-            manager.Arrival(Plane);
+            manager.DepartureOrArrival(Plane);
         }
 
         [HttpGet]
-        public List<Plane> GetFutureArrivals()
+        public List<Plane> GetFutureDeparturesAndArrivals()
         {
             try
             {
-                return manager.GetFutureArrivals();
-            }
-            catch (Exception exc)
-            {
-                var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(exc.Message)
-                };
-
-                throw new HttpResponseException(resp);
-            }
-        }
-
-        [HttpGet]
-        public List<Plane> GetFutureDepartures()
-        {
-            try
-            {
-                return manager.GetFutureDepartures();
+                return manager.GetFutureDeparturesAndArrivals();
             }
             catch (Exception exc)
             {
@@ -81,6 +57,12 @@ namespace Server.Controllers
 
                 throw new HttpResponseException(resp);
             }
+        }
+
+        [HttpPost]
+        public void AddStation(Station station)
+        {
+            manager.AddStation(station);
         }
     }
 }

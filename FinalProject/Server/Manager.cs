@@ -13,7 +13,7 @@ namespace Server
         IHubService hubService;
         IDalService dalService;
 
-        public Manager(IAirportManager airport , IHubService hubService , IDalService dalService)
+        public Manager(IAirportManager airport, IHubService hubService, IDalService dalService)
         {
             this.airport = airport;
             this.dalService = dalService;
@@ -24,36 +24,34 @@ namespace Server
 
         private void Airport_planeMoved(object sender, EventArgs e)
         {
-            if(sender is Plane plane)
+            if (sender is Plane plane)
             {
                 hubService.Moved(plane);
                 dalService.Moved(plane);
             }
         }
 
-        public void Arrival(Plane Plane)
+        public void DepartureOrArrival(Plane plane)
         {
-            airport.NewDepartureOrArrival(Plane);
+            airport.NewDepartureOrArrival(plane);
+            hubService.DepartureOrArrival(plane);
+            dalService.DepartureOrArrival(plane);
         }
 
-        public void Departure(Plane Plane)
+        public List<Plane> GetFutureDeparturesAndArrivals()
         {
-            airport.NewDepartureOrArrival(Plane);
-        }
-
-        public List<Plane> GetFutureArrivals()
-        {
-            return dalService.GetFutureArrivals();
-        }
-
-        public List<Plane> GetFutureDepartures()
-        {
-            return dalService.GetFutureDepartures();
+            return dalService.GetFutureDeparturesAndArrivals();
         }
 
         public List<Station> GetCurrentStationsState()
         {
             return dalService.GetCurrentStationsState();
+        }
+
+        public void AddStation(Station station)
+        {
+            airport.AddStation(station);
+            dalService.AddStation(station);
         }
     }
 }

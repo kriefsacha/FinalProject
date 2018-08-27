@@ -36,7 +36,7 @@ namespace Simulator
         private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             Plane plane = new Plane();
-            plane.ID = $"{GetLetter()}{GetLetter()}{GetNumber()}{GetNumber()}{GetNumber()}";
+            plane.Name = $"{GetLetter()}{GetLetter()}{GetNumber()}{GetNumber()}{GetNumber()}";
             plane.ActionTime = GetActionTime();
             plane.waitingTime = GetWaitingTime();
 
@@ -45,20 +45,17 @@ namespace Simulator
             switch (rnd.Next(2))
             {
                 case 0:
-                    Console.WriteLine("Sending plane " + plane.ID + " to departure in : " + plane.ActionTime + " who will wait in all stations " + plane.waitingTime / 1000 + " seconds");
                     plane.flightState = FlightState.Departure;
-                    string jsond = JsonConvert.SerializeObject(plane);
-                    var httpContentd = new StringContent(jsond, Encoding.UTF8, "application/json");
-                    httpClient.PostAsync("http://localhost:63938/api/airport/Departure",httpContentd).Wait();
                     break;
                 case 1:
-                    Console.WriteLine("Sending plane " + plane.ID + " to arrival in : " + plane.ActionTime + " who will wait in all stations " + plane.waitingTime / 1000 + " seconds");
                     plane.flightState = FlightState.Arrival;
-                    string jsona = JsonConvert.SerializeObject(plane);
-                    var httpContenta = new StringContent(jsona, Encoding.UTF8, "application/json");
-                    httpClient.PostAsync("http://localhost:63938/api/airport/Arrival", httpContenta).Wait();
                     break;
             }
+
+            var json = JsonConvert.SerializeObject(plane);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            httpClient.PostAsync("http://localhost:63938/api/airport/DepartureOrArrival", httpContent).Wait();
+            Console.WriteLine("Sending plane " + plane.Name + " to " + plane.flightState + " at : " + plane.ActionTime + " who will wait in all stations " + plane.waitingTime / 1000 + " seconds");
         }
 
         public static string GetLetter()
@@ -75,7 +72,7 @@ namespace Simulator
         public static DateTime GetActionTime()
         {
             int range = 3;
-            return DateTime.Now.AddMinutes(rnd.Next(1,range));
+            return DateTime.Now.AddMinutes(rnd.Next(1, range));
         }
 
         public static int GetWaitingTime()

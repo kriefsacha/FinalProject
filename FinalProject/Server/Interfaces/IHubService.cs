@@ -9,5 +9,6 @@ namespace Common.Interfaces
     public interface IHubService
     {
         void Moved(Plane plane);
+        void DepartureOrArrival(Plane plane);
     }
 }

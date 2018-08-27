@@ -34,12 +34,11 @@ namespace DAL
 
         public int Number { get; set; }
 
-        public Plane Plane { get; set; }
+        public string PlaneId { get; set; }
 
-        public bool IsAvailable
-        {
-            get { return Plane == null; }
-        }
+        public bool IsAvailable { get; set; }
+
+        public string stepKey { get; set; }
 
     }
 

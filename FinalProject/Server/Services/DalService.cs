@@ -27,29 +27,24 @@ namespace Server.Services
             planeRepository.MoveRequest(plane);
         }
 
-        public void Arrival(Plane Plane)
+       public void DepartureOrArrival(Plane plane)
         {
-            flightRepository.Arrival(Plane);
+            flightRepository.DepartureOrArrival(plane);
         }
 
-        public void Departure(Plane Plane)
+        public List<Plane> GetFutureDeparturesAndArrivals()
         {
-            flightRepository.Departure(Plane);
-        }
-
-        public List<Plane> GetFutureArrivals()
-        {
-            return flightRepository.GetFutureArrivals();
-        }
-
-        public List<Plane> GetFutureDepartures()
-        {
-            return flightRepository.GetFutureDepartures();
+            return flightRepository.GetFutureDeparturesAndArrivals();
         }
 
         public List<Station> GetCurrentStationsState()
         {
             return stationRepository.GetCurrentStationsState();
+        }
+
+        public void AddStation(Station station)
+        {
+            stationRepository.AddStation(station);
         }
     }
 }

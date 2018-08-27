@@ -8,8 +8,14 @@ using System.Web;
 
 namespace Server.Services
 {
-    public class HubService : IHubService
+    internal class HubService : IHubService
     {
+        public void DepartureOrArrival(Plane plane)
+        {
+            var context = GlobalHost.ConnectionManager.GetHubContext<AirportHub>();
+            context.Clients.All.departureOrArrival(plane);
+        }
+
         public void Moved(Plane plane)
         {
             var context = GlobalHost.ConnectionManager.GetHubContext<AirportHub>();

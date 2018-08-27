@@ -10,5 +10,6 @@ namespace Common.Interfaces
     {
         void EnQueue(string key, Plane plane);
         bool TryDequeue(string key, out Plane plane);
+        void Add(string key);
     }
 }

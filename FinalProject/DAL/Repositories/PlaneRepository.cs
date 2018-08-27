@@ -22,8 +22,8 @@ namespace DAL.Repositories
 
                     if (previous != null)
                     {
-                        previous.Plane = null;
-                        context.Histories.Add(new History() { StationNumber = previous.Number, DateOut = DateTime.Now, DateIn = null, PlaneId = Plane.ID });
+                        previous.PlaneId = null;
+                        context.Histories.Add(new History() { StationNumber = previous.Number, DateOut = DateTime.Now, DateIn = null, PlaneId = Plane.Name });
                     }
                 }
 
@@ -31,13 +31,11 @@ namespace DAL.Repositories
 
                 if (next != null)
                 {
-                    next.Plane = Plane;
-                    context.Histories.Add(new History() { StationNumber = next.Number, DateIn = DateTime.Now, DateOut = null, PlaneId = Plane.ID });
+                    next.PlaneId = Plane.Name;
+                    context.Histories.Add(new History() { StationNumber = next.Number, DateIn = DateTime.Now, DateOut = null, PlaneId = Plane.Name });
                 }
 
                 context.SaveChanges();
-
-
             }
         }
     }
