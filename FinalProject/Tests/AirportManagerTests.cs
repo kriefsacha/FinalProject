@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
 using BL;
 using BL.Storage;
 using Common;
@@ -59,13 +57,11 @@ namespace Tests
 
             var airport = new AirportManager(new QueueService(), stationmock.Object);
 
-            var plane = new Plane("FR123", DateTime.Now.AddSeconds(10), 6000000, FlightState.Arrival);
+            var plane = new Plane("FR123", DateTime.Now.AddSeconds(1), 6000000, FlightState.Arrival);
 
             airport.NewDepartureOrArrival(plane);
 
-            Task.Delay(15000).Wait();
-
-            Assert.NotNull(airport.Stations.Where(s => s.plane == plane).FirstOrDefault());
+            Assert.Contains(plane, airport.waitingList);
         }
 
         [Fact]
@@ -75,14 +71,27 @@ namespace Tests
 
             var airport = new AirportManager(new QueueService(), stationmock.Object);
 
-            var plane = new Plane("HE123", DateTime.Now.AddSeconds(10), 6000000, FlightState.Departure);
+            var plane = new Plane("HE123", DateTime.Now.AddSeconds(1), 6000000, FlightState.Departure);
 
             airport.NewDepartureOrArrival(plane);
 
-            Task.Delay(15000).Wait();
+            Assert.Contains(plane, airport.waitingList);
+        }
 
-            //Assert.NotNull(airport.Stations.Where(s => s.plane == plane).FirstOrDefault());
-            Assert.True(airport.Stations[5].plane != null || airport.Stations[6].plane != null);
+        [Fact]
+        public void WaitingTimerTickFunctionTest()
+        {
+            var stationmock = new MockService().GetStationRepositoryMock();
+
+            var airport = new AirportManager(new QueueService(), stationmock.Object);
+
+            var plane = new Plane("HE123", DateTime.Now, 6000, FlightState.Departure);
+
+            airport.waitingList.Add(plane);
+
+            airport.Timer_Elapsed(null, null);
+
+            Assert.DoesNotContain(plane, airport.waitingList);
         }
     }
 }

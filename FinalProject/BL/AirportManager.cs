@@ -3,11 +3,8 @@ using Common;
 using Common.Enums;
 using Common.Interfaces;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 
 namespace BL
@@ -15,7 +12,8 @@ namespace BL
     public class AirportManager : IAirportManager, IDisposable
     {
         public List<StationManager> Stations { get; private set; }
-        private List<WaitingModel> waitingList;
+        public List<Plane> waitingList { get; private set; }
+        private Timer waitingTimer;
         private IQueueService queueService;
         private IStationRepository stationRepository;
         public event EventHandler onPlaneMoved;
@@ -41,7 +39,7 @@ namespace BL
         private void Initialize()
         {
             Stations = new List<StationManager>();
-            waitingList = new List<WaitingModel>();
+            waitingList = new List<Plane>();
             arrivalSteps = new Dictionary<int, string>();
             departureSteps = new Dictionary<int, string>();
 
@@ -90,38 +88,27 @@ namespace BL
 
                 Stations.Add(stationManager);
             }
+
+            waitingTimer = new Timer(30000);
+            waitingTimer.Elapsed += Timer_Elapsed;
+            waitingTimer.Start();
         }
 
         public void NewDepartureOrArrival(Plane Plane)
         {
-            WaitingModel waitingModel = new WaitingModel();
-            waitingModel.plane = Plane;
-
-            var interval = Plane.ActionTime.Subtract(DateTime.Now);
-
-            Timer timer = new Timer(interval.TotalMilliseconds);
-            timer.Elapsed += Timer_Elapsed;
-            waitingModel.timer = timer;
-            timer.Start();
-
-            waitingList.Add(waitingModel);
+            waitingList.Add(Plane);
         }
 
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        public void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (sender is Timer timer)
+            var planesReady = waitingList.Where(p => p.ActionTime <= DateTime.Now).ToList();
+            foreach (var plane in planesReady)
             {
-                timer.Stop();
-                var model = waitingList.Where(m => m.timer == timer).FirstOrDefault();
+                string nextStep = GetNextMove(plane);
 
-                if (model != null)
-                {
-                    string nextStep = GetNextMove(model.plane);
+                queueService.EnQueue(nextStep, plane);
 
-                    queueService.EnQueue(nextStep, model.plane);
-
-                    waitingList.Remove(model);
-                }
+                waitingList.Remove(plane);
             }
         }
 
@@ -133,10 +120,13 @@ namespace BL
 
         public void Dispose()
         {
+            waitingTimer.Stop();
+
             foreach (var station in Stations)
             {
                 station.Dispose();
             }
+
         }
     }
 
