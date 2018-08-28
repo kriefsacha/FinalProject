@@ -1,5 +1,6 @@
 ﻿using Common;
 using Common.Interfaces;
+using Server.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,11 +41,6 @@ namespace Server.Services
         public List<Station> GetCurrentStationsState()
         {
             return stationRepository.GetCurrentStationsState();
-        }
-
-        public void AddStation(Station station)
-        {
-            stationRepository.AddStation(station);
         }
     }
 }

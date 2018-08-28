@@ -15,7 +15,15 @@ namespace BL
         public event EventHandler TookNewPlane;
         public event EventHandler PlaneFinished;
 
-        public StationManager(string queueKey, int number , IQueueService queueService)
+        private bool On;
+
+        private int StationNumber;
+
+        public Plane plane { get; private set; }
+
+        private bool isAvailable { get { return plane == null; } }
+
+        public StationManager(string stepKey, int number , IQueueService queueService)
         {
             StationNumber = number;
 
@@ -25,7 +33,7 @@ namespace BL
             {
                 while (On)
                 {
-                    while (queueService.TryDequeue(queueKey, out Plane plane))
+                    while (queueService.TryDequeue(stepKey, out Plane plane))
                     {
                         this.plane = plane;
                         Do(plane);
@@ -33,16 +41,7 @@ namespace BL
                     Task.Delay(200).Wait();
                 }
             }).Start();
-
         }
-
-        public bool On { get; set; }
-
-        public int StationNumber { get; set; }
-
-        public Plane plane { get; set; }
-
-        public bool isAvailable { get { return plane == null; } }
 
         public void Do(Plane plane)
         {

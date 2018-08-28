@@ -1,5 +1,6 @@
 ﻿using Common;
 using Common.Interfaces;
+using Server.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace Server.Controllers
     public class AirportController : ApiController
     {
         IManager manager;
+
         public AirportController(IManager manager)
         {
             this.manager = manager;
@@ -20,7 +22,19 @@ namespace Server.Controllers
         [HttpPost]
         public void DepartureOrArrival(Plane Plane)
         {
-            manager.DepartureOrArrival(Plane);
+            try
+            {
+                manager.DepartureOrArrival(Plane);
+            }
+            catch (Exception exc)
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(exc.Message)
+                };
+
+                throw new HttpResponseException(resp);
+            }
         }
 
         [HttpGet]
@@ -57,12 +71,6 @@ namespace Server.Controllers
 
                 throw new HttpResponseException(resp);
             }
-        }
-
-        [HttpPost]
-        public void AddStation(Station station)
-        {
-            manager.AddStation(station);
         }
     }
 }

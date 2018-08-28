@@ -54,28 +54,32 @@ namespace Simulator
 
             var json = JsonConvert.SerializeObject(plane);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            httpClient.PostAsync("http://localhost:63938/api/airport/DepartureOrArrival", httpContent).Wait();
-            Console.WriteLine("Sending plane " + plane.Name + " to " + plane.flightState + " at : " + plane.ActionTime + " who will wait in all stations " + plane.waitingTime / 1000 + " seconds");
+            var t = httpClient.PostAsync("http://localhost:63938/api/airport/DepartureOrArrival", httpContent);
+            t.Wait();
+            if (t.Result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                Console.WriteLine("Error : " + t.Result.Content.ReadAsStringAsync().Result);
+            else
+                Console.WriteLine("Sending plane " + plane.Name + " to " + plane.flightState + " at : " + plane.ActionTime + " who will wait in all stations " + plane.waitingTime / 1000 + " seconds");
         }
 
-        public static string GetLetter()
+        private static string GetLetter()
         {
             int num = rnd.Next(0, 26);
             return ((char)('a' + num)).ToString().ToUpper();
         }
 
-        public static int GetNumber()
+        private static int GetNumber()
         {
             return rnd.Next(0, 10);
         }
 
-        public static DateTime GetActionTime()
+        private static DateTime GetActionTime()
         {
             int range = 3;
             return DateTime.Now.AddMinutes(rnd.Next(1, range));
         }
 
-        public static int GetWaitingTime()
+        private static int GetWaitingTime()
         {
             return rnd.Next(4000, 10000);
         }

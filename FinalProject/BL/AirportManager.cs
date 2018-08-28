@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using BL.Interfaces;
+using Common;
 using Common.Enums;
 using Common.Interfaces;
 using System;
@@ -13,19 +14,28 @@ namespace BL
 {
     public class AirportManager : IAirportManager, IDisposable
     {
-        public List<StationManager> Stations { get; set; }
-        List<WaitingModel> waitingList { get; set; }
-        IQueueService queueService { get; set; }
-        IStationRepository stationRepository { get; set; }
-        public event EventHandler planeMoved;
-        Dictionary<int, string> arrivalSteps;
-        Dictionary<int, string> departureSteps;
+        public List<StationManager> Stations { get; private set; }
+        private List<WaitingModel> waitingList;
+        private IQueueService queueService;
+        private IStationRepository stationRepository;
+        public event EventHandler onPlaneMoved;
+        public event EventHandler onError;
+        private Dictionary<int, string> arrivalSteps;
+        private Dictionary<int, string> departureSteps;
 
-        public AirportManager(IQueueService queueService , IStationRepository stationRepository)
+        public AirportManager(IQueueService queueService, IStationRepository stationRepository)
         {
             this.queueService = queueService;
             this.stationRepository = stationRepository;
-            Initialize();
+
+            try
+            {
+                Initialize();
+            }
+            catch (Exception exc)
+            {
+                onError.Invoke(exc, EventArgs.Empty);
+            }
         }
 
         private void Initialize()
@@ -35,6 +45,22 @@ namespace BL
             arrivalSteps = new Dictionary<int, string>();
             departureSteps = new Dictionary<int, string>();
 
+            var relations = stationRepository.GetRelations();
+
+            var departureRelations = relations.Where(r => r.State == FlightState.Departure);
+            foreach (var relation in departureRelations)
+            {
+                departureSteps.Add(relation.StationId, relation.StepId);
+            }
+
+            var arrivalRelations = relations.Where(r => r.State == FlightState.Arrival);
+            foreach (var relation in arrivalRelations)
+            {
+                arrivalSteps.Add(relation.StationId, relation.StepId);
+            }
+
+            queueService.Add(relations);
+
             var dalStations = stationRepository.GetCurrentStationsState();
 
             foreach (var station in dalStations)
@@ -43,48 +69,27 @@ namespace BL
 
                 stationManager.TookNewPlane += (sender, e) =>
                 {
-                    planeMoved.Invoke(sender, e);
+                    onPlaneMoved.Invoke(sender, e);
                 };
 
                 stationManager.PlaneFinished += (sender, e) =>
                 {
                     if (sender is Plane plane)
                     {
-                        var nextStep = "";
-
-                        if (plane.flightState == FlightState.Arrival)
-                            nextStep = ArrivalMovement(plane);
-                        else
-                            nextStep = DepartureMovement(plane);
+                        var nextStep = GetNextMove(plane);
 
                         if (nextStep != null)
                             queueService.EnQueue(nextStep, plane);
                         else
                         {
                             plane.FinishWay();
-                            planeMoved.Invoke(plane, e);
+                            onPlaneMoved.Invoke(plane, e);
                         }
                     }
                 };
 
                 Stations.Add(stationManager);
             }
-
-
-            arrivalSteps.Add(0, "S1");
-            arrivalSteps.Add(1, "S2");
-            arrivalSteps.Add(2, "S3");
-            arrivalSteps.Add(3, "S4");
-            arrivalSteps.Add(4, "S5");
-            arrivalSteps.Add(5, "S6");
-            arrivalSteps.Add(6, null);
-            arrivalSteps.Add(7, null);
-
-            departureSteps.Add(0, "S6");
-            departureSteps.Add(4, null);
-            departureSteps.Add(6, "S7");
-            departureSteps.Add(7, "S7");
-            departureSteps.Add(8, "S4");
         }
 
         public void NewDepartureOrArrival(Plane Plane)
@@ -111,11 +116,7 @@ namespace BL
 
                 if (model != null)
                 {
-                    string nextStep = "";
-
-                    if (model.plane.flightState == FlightState.Arrival) nextStep = ArrivalMovement(model.plane);
-
-                    else nextStep = DepartureMovement(model.plane);
+                    string nextStep = GetNextMove(model.plane);
 
                     queueService.EnQueue(nextStep, model.plane);
 
@@ -124,20 +125,10 @@ namespace BL
             }
         }
 
-        public string DepartureMovement(Plane plane)
+        public string GetNextMove(Plane plane)
         {
-            return departureSteps[plane.StationNumber];
-        }
-
-        public string ArrivalMovement(Plane plane)
-        {
-            return arrivalSteps[plane.StationNumber];
-        }
-
-        public void AddStation(Station station)
-        {
-            Stations.Add(new StationManager(station.stepKey, station.Number, queueService));
-            queueService.Add(station.stepKey);
+            if(plane.flightState == FlightState.Departure) return departureSteps[plane.StationNumber];
+            else return arrivalSteps[plane.StationNumber];
         }
 
         public void Dispose()
@@ -147,8 +138,6 @@ namespace BL
                 station.Dispose();
             }
         }
-
-
     }
 
     public class WaitingModel

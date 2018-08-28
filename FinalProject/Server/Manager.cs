@@ -1,5 +1,6 @@
 ﻿using Common;
 using Common.Interfaces;
+using Server.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,13 @@ namespace Server
             this.dalService = dalService;
             this.hubService = hubService;
 
-            airport.planeMoved += Airport_planeMoved;
+            airport.onPlaneMoved += Airport_planeMoved;
+            airport.onError += Airport_onError;
+        }
+
+        private void Airport_onError(object sender, EventArgs e)
+        {
+            hubService.OnError(sender as Exception);
         }
 
         private void Airport_planeMoved(object sender, EventArgs e)
@@ -46,12 +53,6 @@ namespace Server
         public List<Station> GetCurrentStationsState()
         {
             return dalService.GetCurrentStationsState();
-        }
-
-        public void AddStation(Station station)
-        {
-            airport.AddStation(station);
-            dalService.AddStation(station);
         }
     }
 }

@@ -9,6 +9,6 @@ namespace Common.Interfaces
     public interface IStationRepository
     {
         List<Station> GetCurrentStationsState();
-        void AddStation(Station station);
+        List<Relation> GetRelations();
     }
 }

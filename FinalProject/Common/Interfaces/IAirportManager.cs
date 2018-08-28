@@ -9,9 +9,8 @@ namespace Common.Interfaces
     public interface IAirportManager
     {
         void NewDepartureOrArrival(Plane Plane);
-        string DepartureMovement(Plane plane);
-        string ArrivalMovement(Plane plane);
-        void AddStation(Station station);
-        event EventHandler planeMoved;
+        string GetNextMove(Plane plane);
+        event EventHandler onPlaneMoved;
+        event EventHandler onError;
     }
 }

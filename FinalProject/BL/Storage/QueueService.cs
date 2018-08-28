@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using BL.Interfaces;
+using Common;
 using Common.Interfaces;
 using System;
 using System.Collections.Concurrent;
@@ -16,18 +17,11 @@ namespace BL.Storage
         public QueueService()
         {
             queuesSteps = new Dictionary<string, ConcurrentQueue<Plane>>();
-            queuesSteps.Add("S1", new ConcurrentQueue<Plane>());
-            queuesSteps.Add("S2", new ConcurrentQueue<Plane>());
-            queuesSteps.Add("S3", new ConcurrentQueue<Plane>());
-            queuesSteps.Add("S4", new ConcurrentQueue<Plane>());
-            queuesSteps.Add("S5", new ConcurrentQueue<Plane>());
-            queuesSteps.Add("S6", new ConcurrentQueue<Plane>()); //6 7
-            queuesSteps.Add("S7", new ConcurrentQueue<Plane>()); //8
         }
 
         public bool TryDequeue(string key, out Plane plane)
         {
-           return queuesSteps[key].TryDequeue(out plane);
+            return queuesSteps[key].TryDequeue(out plane);
         }
 
         public void EnQueue(string key, Plane plane)
@@ -35,9 +29,13 @@ namespace BL.Storage
             queuesSteps[key].Enqueue(plane);
         }
 
-        public void Add(string key)
+        public void Add(List<Relation> relations)
         {
-            queuesSteps.Add(key, new ConcurrentQueue<Plane>());
+            foreach (var relation in relations)
+            {
+                if (relation.StepId != null && !queuesSteps.ContainsKey(relation.StepId))
+                    queuesSteps.Add(relation.StepId, new ConcurrentQueue<Plane>());
+            }
         }
     }
 }

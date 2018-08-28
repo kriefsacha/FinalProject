@@ -1,6 +1,7 @@
 ﻿using Common;
 using Common.Interfaces;
 using Microsoft.AspNet.SignalR;
+using Server.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,12 @@ namespace Server.Services
         {
             var context = GlobalHost.ConnectionManager.GetHubContext<AirportHub>();
             context.Clients.All.moved(plane);
+        }
+
+        public void OnError(Exception exc)
+        {
+            var context = GlobalHost.ConnectionManager.GetHubContext<AirportHub>();
+            context.Clients.All.onerror(exc.Message);
         }
     }
 }

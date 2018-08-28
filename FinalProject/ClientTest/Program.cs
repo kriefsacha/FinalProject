@@ -14,6 +14,12 @@ namespace ClientTest
     {
         static void Main(string[] args)
         {
+            // need to add to all tasks !!!! :
+            //if (t.Result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            //    Console.WriteLine("Error : " + t.Result.Content.ReadAsStringAsync().Result);
+            //else
+            //    showerror()
+
             //var t1 = new Task(() =>
             //{
             //    HttpClient httpClient = new HttpClient();
@@ -63,8 +69,14 @@ namespace ClientTest
             var proxy = hubConnection.CreateHubProxy("AirportHub");
             proxy.On<Plane>("moved", Moved);
             proxy.On<Plane>("departureOrArrival", DepartureOrArrival);
+            proxy.On<string>("onerror", OnError);
             hubConnection.Start();
             Console.ReadLine();
+        }
+
+        private static void OnError(string obj)
+        {
+            Console.WriteLine("Error : " + obj);
         }
 
         private static void DepartureOrArrival(Plane obj)

@@ -1,6 +1,7 @@
 namespace DAL
 {
     using Common;
+    using Common.Enums;
     using Microsoft.Azure;
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -25,6 +26,8 @@ namespace DAL
         public virtual DbSet<Departure> Departures { get; set; }
 
         public virtual DbSet<Arrival> Arrivals { get; set; }
+
+        public virtual DbSet<Relation> Relations { get; set; }
     }
 
     public class Station
@@ -74,5 +77,17 @@ namespace DAL
         public string PlaneId { get; set; }
 
         public DateTime DatePlanned { get; set; }
+    }
+
+    public class Relation
+    {
+        [Key]
+        public int Id { get; set; }
+
+        public int StationId { get; set; }
+
+        public string StepId { get; set; }
+
+        public FlightState State { get; set; }
     }
 }

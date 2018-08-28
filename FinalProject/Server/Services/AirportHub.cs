@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Server
+namespace Server.Services
 {
     public class AirportHub : Hub
     {
