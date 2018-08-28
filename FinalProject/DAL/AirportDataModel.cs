@@ -67,6 +67,8 @@ namespace DAL
         public string PlaneId { get; set; }
 
         public DateTime DatePlanned { get; set; }
+
+        public int waitingTime { get; set; }
     }
 
     public class Arrival
@@ -77,6 +79,8 @@ namespace DAL
         public string PlaneId { get; set; }
 
         public DateTime DatePlanned { get; set; }
+
+        public int waitingTime { get; set; }
     }
 
     public class Relation

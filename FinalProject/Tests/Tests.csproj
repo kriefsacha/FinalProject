@@ -83,7 +83,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AirportManagerTests.cs" />
+    <Compile Include="MockService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueueServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

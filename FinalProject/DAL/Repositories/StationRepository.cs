@@ -21,7 +21,7 @@ namespace DAL.Repositories
                 foreach (var station in DALStations)
                 {
                     if (!station.IsAvailable && station.PlaneId != null && station.PlaneId != "")
-                        stations.Add(new Common.Station(station.Number,station.stepKey ) { Plane = new Plane() { Name = station.PlaneId } });
+                        stations.Add(new Common.Station(station.Number,station.stepKey ) { Plane = new Plane(station.PlaneId , DateTime.Now , 0 , Common.Enums.FlightState.Arrival) }); // To change !!!
                     else
                         stations.Add(new Common.Station(station.Number, station.stepKey) );
                 }

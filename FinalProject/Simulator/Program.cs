@@ -35,22 +35,27 @@ namespace Simulator
 
         private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Plane plane = new Plane();
-            plane.Name = $"{GetLetter()}{GetLetter()}{GetNumber()}{GetNumber()}{GetNumber()}";
-            plane.ActionTime = GetActionTime();
-            plane.waitingTime = GetWaitingTime();
-
-            HttpClient httpClient = new HttpClient();
+            var Name = $"{GetLetter()}{GetLetter()}{GetNumber()}{GetNumber()}{GetNumber()}";
+            var ActionTime = GetActionTime();
+            var waitingTime = GetWaitingTime();
+            FlightState flightState =  FlightState.Arrival;
 
             switch (rnd.Next(2))
             {
                 case 0:
-                    plane.flightState = FlightState.Departure;
+                    flightState = FlightState.Departure;
                     break;
                 case 1:
-                    plane.flightState = FlightState.Arrival;
+                    flightState = FlightState.Arrival;
                     break;
             }
+
+            Plane plane = new Plane(Name,ActionTime , waitingTime , flightState);
+ 
+
+            HttpClient httpClient = new HttpClient();
+
+
 
             var json = JsonConvert.SerializeObject(plane);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");

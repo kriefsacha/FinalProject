@@ -34,7 +34,7 @@ namespace BL
             }
             catch (Exception exc)
             {
-                onError.Invoke(exc, EventArgs.Empty);
+                onError?.Invoke(exc, EventArgs.Empty);
             }
         }
 
@@ -69,7 +69,7 @@ namespace BL
 
                 stationManager.TookNewPlane += (sender, e) =>
                 {
-                    onPlaneMoved.Invoke(sender, e);
+                    onPlaneMoved?.Invoke(sender, e);
                 };
 
                 stationManager.PlaneFinished += (sender, e) =>
@@ -83,7 +83,7 @@ namespace BL
                         else
                         {
                             plane.FinishWay();
-                            onPlaneMoved.Invoke(plane, e);
+                            onPlaneMoved?.Invoke(plane, e);
                         }
                     }
                 };
@@ -97,10 +97,10 @@ namespace BL
             WaitingModel waitingModel = new WaitingModel();
             waitingModel.plane = Plane;
 
-            Timer timer = new Timer();
-            timer.Elapsed += Timer_Elapsed;
             var interval = Plane.ActionTime.Subtract(DateTime.Now);
-            timer.Interval = interval.TotalMilliseconds;
+
+            Timer timer = new Timer(interval.TotalMilliseconds);
+            timer.Elapsed += Timer_Elapsed;
             waitingModel.timer = timer;
             timer.Start();
 
@@ -127,7 +127,7 @@ namespace BL
 
         public string GetNextMove(Plane plane)
         {
-            if(plane.flightState == FlightState.Departure) return departureSteps[plane.StationNumber];
+            if (plane.flightState == FlightState.Departure) return departureSteps[plane.StationNumber];
             else return arrivalSteps[plane.StationNumber];
         }
 

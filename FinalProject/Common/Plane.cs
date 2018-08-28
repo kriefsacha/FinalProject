@@ -9,6 +9,14 @@ namespace Common
 {
     public class Plane
     {
+        public Plane(string Name , DateTime ActionTime , int waitingTime , FlightState flightState)
+        {
+            this.Name = Name;
+            this.ActionTime = ActionTime;
+            this.waitingTime = waitingTime;
+            this.flightState = flightState;
+        }
+
         public string Name { get; set; }
 
         private int _stationNumber;

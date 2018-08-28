@@ -12,7 +12,7 @@ namespace BL.Storage
 {
     public class QueueService : IQueueService
     {
-        Dictionary<string, ConcurrentQueue<Plane>> queuesSteps;
+        public Dictionary<string, ConcurrentQueue<Plane>> queuesSteps { get; private set; }
 
         public QueueService()
         {

@@ -15,9 +15,9 @@ namespace DAL.Repositories
             using (AirportDataModel context = new AirportDataModel())
             {
                 if (plane.flightState == Common.Enums.FlightState.Departure)
-                    context.Departures.Add(new Departure() { PlaneId = plane.Name, DatePlanned = plane.ActionTime });
+                    context.Departures.Add(new Departure() { PlaneId = plane.Name, DatePlanned = plane.ActionTime , waitingTime = plane.waitingTime});
                 else
-                    context.Arrivals.Add(new Arrival() { PlaneId = plane.Name, DatePlanned = plane.ActionTime });
+                    context.Arrivals.Add(new Arrival() { PlaneId = plane.Name, DatePlanned = plane.ActionTime , waitingTime = plane.waitingTime});
 
                 context.SaveChanges();
             }
@@ -33,14 +33,14 @@ namespace DAL.Repositories
 
                 foreach (var futureDeparture in DalFutureDepartures)
                 {
-                    FutureDeparturesAndArrivals.Add(new Plane { ActionTime = futureDeparture.DatePlanned, Name = futureDeparture.PlaneId , flightState = Common.Enums.FlightState.Departure });
+                    FutureDeparturesAndArrivals.Add(new Plane(futureDeparture.PlaneId , futureDeparture.DatePlanned , futureDeparture.waitingTime , Common.Enums.FlightState.Departure));
                 }
 
                 var DalFutureArrivals = context.Arrivals.Where(a => a.DatePlanned > DateTime.Now).OrderBy(a => a.DatePlanned).ToList();
 
                 foreach (var futureArrival in DalFutureArrivals)
                 {
-                    FutureDeparturesAndArrivals.Add(new Plane { ActionTime = futureArrival.DatePlanned, Name = futureArrival.PlaneId  , flightState = Common.Enums.FlightState.Arrival});
+                    FutureDeparturesAndArrivals.Add(new Plane(futureArrival.PlaneId , futureArrival.DatePlanned , futureArrival.waitingTime , Common.Enums.FlightState.Arrival));
                 }
             }
             return FutureDeparturesAndArrivals;
