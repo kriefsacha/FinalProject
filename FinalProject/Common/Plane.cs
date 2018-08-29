@@ -1,11 +1,15 @@
 ﻿using Common.Enums;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Common
 {
     public class Plane
     {
-        public Plane(string Name , DateTime ActionTime , int waitingTime , FlightState flightState)
+        public Plane(string Name, DateTime ActionTime, int waitingTime, FlightState flightState)
         {
             this.Name = Name;
             this.ActionTime = ActionTime;
@@ -20,7 +24,8 @@ namespace Common
         public int StationNumber
         {
             get { return _stationNumber; }
-            set {
+            set
+            {
                 //if(value > 0 && value < 9)
                 _stationNumber = value;
             }
@@ -55,7 +60,7 @@ namespace Common
         {
             SetStation(0);
         }
-        public delegate void MovedHandler (int senderId, EventArgs e);
+        public delegate void MovedHandler(int senderId, EventArgs e);
 
         public event MovedHandler Moved;
 

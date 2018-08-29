@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -9,42 +10,44 @@ namespace Client.Models
 {
     public class Plane : INotifyPropertyChanged
     {
-        public string ID { get; set; }
+
+        public Plane(string Name, DateTime ActionTime, int waitingTime, FlightState flightState)
+        {
+            this.Name = Name;
+            this.ActionTime = ActionTime;
+            this.waitingTime = waitingTime;
+            this.flightState = flightState;
+        }
+
+        public string Name { get; set; }
+
+        public int waitingTime { get; set; }
+
+        public DateTime ActionTime { get; set; }
+
+        public FlightState flightState { get; set; }
 
         private int _stationNumber;
-        private int _previousstationNumber;
+        Random r = new Random();
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        public int PreviousStationNumber
-        {
-            get { return _previousstationNumber; }
-            set
-            {
-                if (value >= 0 && value < 9)
-                    _previousstationNumber = value;
-                Notify(nameof(PreviousStationNumber));
-            }
-
-        }
 
         public int StationNumber
         {
             get { return _stationNumber; }
             set
             {
-                if (value >= 0 && value < 9)
+                //if (value >= 0 && value < 9)
                     _stationNumber = value;
                 Notify(nameof(StationNumber));
             }
         }
 
-       
-            public void Notify(string propName)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-            }
-        Random r = new Random();
+        public void Notify(string propName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+        }
+
 
         private int _randomPicture;
 
@@ -57,8 +60,7 @@ namespace Client.Models
                 return _randomPicture;
             }
         }
-        // now = 0 going out
-        // per = 0 not been
+
 
     }
 }

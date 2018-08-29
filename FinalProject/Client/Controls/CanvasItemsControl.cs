@@ -14,44 +14,22 @@ namespace Client.Controls
 {
     public class CanvasItemsControl : ItemsControl
     {
-       
-
-        //public static int GetStation(DependencyObject obj)
-        //{
-        //    return (int)obj.GetValue(StationProperty);
-        //}
-
-        //public static void SetStation(DependencyObject obj, int value)
-        //{
-        //    obj.SetValue(StationProperty, value);
-        //}
-
         public static readonly DependencyProperty StationProperty =
             DependencyProperty.RegisterAttached("StationNumber", typeof(int), typeof(CanvasItemsControl), new PropertyMetadata(0, OnStationProperty));
-
-        //public static readonly DependencyProperty StationProperty1 =
-        //   DependencyProperty.RegisterAttached("PreviousStationNumber", typeof(int), typeof(CanvasItemsControl), new PropertyMetadata(0, OnStationProperty));
 
 
         private static void OnStationProperty(DependencyObject Plane, DependencyPropertyChangedEventArgs stationNumber)
         {
-            //d is the element
-            //e is the station we have old and new
             FrameworkElement contentControl = (FrameworkElement)Plane;
 
             var from = (int)stationNumber.OldValue;
             var to = (int)stationNumber.NewValue;
 
-
             var toX = GetStationLeft(to);
             var toY = GetStationTop(to);
 
-
-
             if (to != 0)
             {
-                //var toX = (to % 3) * 200 + 100;
-                //var toY = (to / 3) * 100 + 100;
                 Storyboard moveStoeyBoard = new Storyboard();
                 DoubleAnimation leftDoubleAmnimation = new DoubleAnimation();
                 DoubleAnimation topDoubleAmnimation = new DoubleAnimation();
@@ -69,7 +47,7 @@ namespace Client.Controls
             }
             else
             {
-                contentControl.Visibility = Visibility.Collapsed; // how to take off the list??
+                contentControl.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -77,14 +55,10 @@ namespace Client.Controls
                             DependencyObject element,
                             object item)
         {
-            //var converter = new StationToLocationConverter();
             Binding binding = new Binding() { Path = new PropertyPath("StationNumber") };
-
-            //Binding binding1 = new Binding() { Path = new PropertyPath("PreviousStationNumber") };
 
             FrameworkElement contentControl = (FrameworkElement)element;
             contentControl.SetBinding(StationProperty, binding);
-            //contentControl.SetBinding(StationProperty, binding1);
 
             base.PrepareContainerForItemOverride(element, item);
         }

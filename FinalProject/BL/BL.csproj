@@ -55,8 +55,8 @@
     <Compile Include="Storage\QueueService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{69025e0d-0041-4822-a797-449c0d3fff84}</Project>
+    <ProjectReference Include="..\Common1\Common.csproj">
+      <Project>{14cd71fc-36e4-4c65-b575-30cca54b5b37}</Project>
       <Name>Common</Name>
     </ProjectReference>
   </ItemGroup>

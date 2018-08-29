@@ -153,8 +153,8 @@
       <Project>{7EEE6913-3E78-4B0D-A52F-A4AA787C599B}</Project>
       <Name>BL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{69025E0D-0041-4822-A797-449C0D3FFF84}</Project>
+    <ProjectReference Include="..\Common1\Common.csproj">
+      <Project>{14cd71fc-36e4-4c65-b575-30cca54b5b37}</Project>
       <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\DAL\DAL.csproj">

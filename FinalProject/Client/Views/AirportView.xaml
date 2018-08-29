@@ -1,13 +1,13 @@
 ﻿<Page
-    x:Class="Client.AirportView1"
+    x:Class="Client.AirportView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Client"
     xmlns:converters="using:Client.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:VM ="using:Client.ViewModels"
-    xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:UC="using:Client.Controls"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:Model="using:Client.Models"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -16,10 +16,8 @@
         <VM:AirportViewModel x:Name="viewModel"></VM:AirportViewModel>
     </Page.DataContext>
 
-
     <Page.Resources>
         <converters:IntToImageConverter x:Key="ToImageConverter"/>
-        <converters:StationToLocationConverter x:Key="ToLocation"/>
     </Page.Resources>
 
     <StackPanel>
@@ -59,7 +57,6 @@
                     <UC:CanvasItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="Model:Plane">
                             <Image Source="{x:Bind RandomPicture,Converter={StaticResource ToImageConverter}}" Width="100" Height="100" Canvas.Left="-100"/>
-                            <!--<Image Source= "ms-appx:/Assets/Planes/1.png" Width="100" HorizontalAlignment="Right"/>-->
                         </DataTemplate>
                     </UC:CanvasItemsControl.ItemTemplate>
                     <UC:CanvasItemsControl.ItemsPanel>
@@ -69,12 +66,8 @@
                     </UC:CanvasItemsControl.ItemsPanel>
                 </UC:CanvasItemsControl>
             </Grid>
-            <Grid x:Name="futureInformationGrid"  Height="170" Width="1200" Background="Black" Grid.Row="1" Grid.ColumnSpan="2">
-                <StackPanel >
-                    <UC:InformationUserControl/>
-                </StackPanel>
-            </Grid>
-            <Grid x:Name="AirPortMapGrid" Height="500" Width="400" Background="DarkGray" Grid.Column="1"/>
+            <UC:FlightsDetails Height="170" Width="1200" Background="Black" Grid.Row="1" Grid.ColumnSpan="2"/>
+            <UC:StationsDetails Height="500" Width="400" Background="DarkGray" Grid.Column="1"/>
         </Grid>
     </StackPanel>
 </Page>

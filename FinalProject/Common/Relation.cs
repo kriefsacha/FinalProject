@@ -9,7 +9,7 @@ namespace Common
 {
     public class Relation
     {
-        public Relation(int stationId , string stepId , FlightState state)
+        public Relation(int stationId, string stepId, FlightState state)
         {
             StationId = stationId;
             StepId = stepId;
