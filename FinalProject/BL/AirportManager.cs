@@ -129,10 +129,4 @@ namespace BL
 
         }
     }
-
-    public class WaitingModel
-    {
-        public Timer timer { get; set; }
-        public Plane plane { get; set; }
-    }
 }

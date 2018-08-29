@@ -37,9 +37,7 @@ namespace Tests
 
             queueService.EnQueue("S1", new Plane("FR123", DateTime.Now, 3000, FlightState.Departure));
 
-            queueService.TryDequeue("S1", out Plane plane);
-
-            Assert.True(queueService.queuesSteps["S1"].IsEmpty);
+            Assert.True(queueService.TryDequeue("S1", out Plane plane));
         }
 
         [Fact]
@@ -51,9 +49,7 @@ namespace Tests
                 new Relation(1,"S1" , FlightState.Departure),
             });
 
-            queueService.TryDequeue("S1", out Plane plane);
-
-            Assert.True(queueService.queuesSteps["S1"].IsEmpty);
+            Assert.False(queueService.TryDequeue("S1", out Plane plane));
         }
 
         [Fact]
@@ -62,7 +58,7 @@ namespace Tests
             QueueService queueService = new QueueService();
             queueService.Add(new List<Relation>()
             {
-                new Relation(1,"S1" , FlightState.Departure),
+                new Relation(1,"S1" , FlightState.Departure)
             });
 
             Assert.True(queueService.queuesSteps.ContainsKey("S1"));

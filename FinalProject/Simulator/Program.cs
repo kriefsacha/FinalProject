@@ -16,14 +16,14 @@ namespace Simulator
     class Program
     {
         static Random rnd;
-
+        static Timer timer;
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome To Airport Simulator !");
             Console.WriteLine("--------------------------------------------------------------" + Environment.NewLine);
             rnd = new Random();
 
-            Timer timer = new Timer(30000);
+            timer = new Timer(30000);
             timer.Elapsed += Timer_Elapsed;
             timer.Start();
 
@@ -51,18 +51,19 @@ namespace Simulator
             }
 
             Plane plane = new Plane(Name,ActionTime , waitingTime , flightState);
- 
 
             HttpClient httpClient = new HttpClient();
-
-
 
             var json = JsonConvert.SerializeObject(plane);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var t = httpClient.PostAsync("http://localhost:63938/api/airport/DepartureOrArrival", httpContent);
             t.Wait();
+
             if (t.Result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
                 Console.WriteLine("Error : " + t.Result.Content.ReadAsStringAsync().Result);
+                timer.Stop();
+            }
             else
                 Console.WriteLine("Sending plane " + plane.Name + " to " + plane.flightState + " at : " + plane.ActionTime + " who will wait in all stations " + plane.waitingTime / 1000 + " seconds");
         }
