@@ -12,3 +12,16 @@ C:\Users\krief\Documents\GitHub\FinalProject\FinalProject\ClientTest\obj\Debug\C
 C:\Users\krief\Documents\GitHub\FinalProject\FinalProject\ClientTest\obj\Debug\ClientTest.pdb
 C:\Users\krief\Documents\GitHub\FinalProject\FinalProject\ClientTest\bin\Debug\Microsoft.AspNet.SignalR.Client.dll
 C:\Users\krief\Documents\GitHub\FinalProject\FinalProject\ClientTest\bin\Debug\Microsoft.AspNet.SignalR.Client.xml
+C:\Users\עינת\Documents\GitHub\FinalProject\FinalProject\ClientTest\bin\Debug\ClientTest.exe.config
+C:\Users\עינת\Documents\GitHub\FinalProject\FinalProject\ClientTest\bin\Debug\ClientTest.exe
+C:\Users\עינת\Documents\GitHub\FinalProject\FinalProject\ClientTest\bin\Debug\ClientTest.pdb
+C:\Users\עינת\Documents\GitHub\FinalProject\FinalProject\ClientTest\bin\Debug\Common.dll
+C:\Users\עינת\Documents\GitHub\FinalProject\FinalProject\ClientTest\bin\Debug\Microsoft.AspNet.SignalR.Client.dll
+C:\Users\עינת\Documents\GitHub\FinalProject\FinalProject\ClientTest\bin\Debug\Newtonsoft.Json.dll
+C:\Users\עינת\Documents\GitHub\FinalProject\FinalProject\ClientTest\bin\Debug\Common.pdb
+C:\Users\עינת\Documents\GitHub\FinalProject\FinalProject\ClientTest\bin\Debug\Microsoft.AspNet.SignalR.Client.xml
+C:\Users\עינת\Documents\GitHub\FinalProject\FinalProject\ClientTest\bin\Debug\Newtonsoft.Json.xml
+C:\Users\עינת\Documents\GitHub\FinalProject\FinalProject\ClientTest\obj\Debug\ClientTest.csprojResolveAssemblyReference.cache
+C:\Users\עינת\Documents\GitHub\FinalProject\FinalProject\ClientTest\obj\Debug\ClientTest.csproj.CoreCompileInputs.cache
+C:\Users\עינת\Documents\GitHub\FinalProject\FinalProject\ClientTest\obj\Debug\ClientTest.exe
+C:\Users\עינת\Documents\GitHub\FinalProject\FinalProject\ClientTest\obj\Debug\ClientTest.pdb
