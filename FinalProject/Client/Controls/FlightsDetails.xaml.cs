@@ -13,13 +13,6 @@ namespace Client.Controls
     public sealed partial class FlightsDetails : UserControl
     {
         ObservableCollection<Models.Plane> Flights = new ObservableCollection<Client.Models.Plane>();
-        public ObservableCollection<Models.Plane> Flights2
-        {
-            get
-            {
-                return (ObservableCollection<Models.Plane>)Flights.Where(f => f.ActionTime < DateTime.Now).OrderBy(f => f.ActionTime);
-            }
-        }
 
         public FlightsDetails()
         {
@@ -42,7 +35,7 @@ namespace Client.Controls
             proxy.On<Common.Plane>("departureOrArrival", DepartureOrArrival);
             hubConnection.Start();
 
-            InformationLV.ItemsSource = Flights2;
+            InformationLV.ItemsSource = Flights;
         }
 
         private async void DepartureOrArrival(Common.Plane plane)
