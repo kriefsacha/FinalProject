@@ -55,14 +55,14 @@
     <Compile Include="Storage\QueueService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common1\Common.csproj">
-      <Project>{14cd71fc-36e4-4c65-b575-30cca54b5b37}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{14CD71FC-36E4-4C65-B575-30CCA54B5B37}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

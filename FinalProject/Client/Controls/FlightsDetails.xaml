@@ -15,13 +15,13 @@
         <Converters:ActionTimeToVisibilityConverter x:Key="ActionTimeToVisibilityConverter"/>
     </UserControl.Resources>
     
-    <ListView Name="InformationLV" Background="Black">
+    <ListView Name="InformationLV" Background="Black" Height="220">
         <ListView.ItemTemplate>
             <DataTemplate>
-                <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name}" FontSize="14" Foreground="Yellow" Padding="0,4,0,4" Visibility="{Binding ActionTime , Converter={StaticResource ActionTimeToVisibilityConverter} , Mode=TwoWay}"/>
-                        <TextBlock Text="{Binding ActionTime}" FontSize="14" Foreground="Yellow" Padding="0,4,0,4"/>
-                        <TextBlock Text="{Binding flightState}" FontSize="14" Foreground="Yellow" Padding="0,4,0,4"/>
+                <StackPanel Orientation="Horizontal" Visibility="{Binding ActionTime , Converter={StaticResource ActionTimeToVisibilityConverter} , Mode=OneWay}">
+                    <TextBlock Text="{Binding Name}" FontSize="14" Foreground="Yellow" Margin="4,0,4,0"/>
+                    <TextBlock Text="{Binding ActionTime}" FontSize="14" Foreground="Yellow" Margin="4,0,4,0"/>
+                    <TextBlock Text="{Binding flightState}" FontSize="14" Foreground="Yellow" Margin="4,0,4,0"/>
                     </StackPanel>
             </DataTemplate>
         </ListView.ItemTemplate>

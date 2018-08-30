@@ -18471,12 +18471,12 @@
   },
   "project": {
     "restore": {
-      "projectUniqueName": "C:\\Users\\krief\\Documents\\GitHub\\FinalProject\\FinalProject\\Common1\\Common.csproj",
+      "projectUniqueName": "C:\\Users\\krief\\Documents\\GitHub\\FinalProject\\FinalProject\\Common\\Common.csproj",
       "projectName": "Common",
-      "projectPath": "C:\\Users\\krief\\Documents\\GitHub\\FinalProject\\FinalProject\\Common1\\Common.csproj",
-      "projectJsonPath": "C:\\Users\\krief\\Documents\\GitHub\\FinalProject\\FinalProject\\Common1\\project.json",
+      "projectPath": "C:\\Users\\krief\\Documents\\GitHub\\FinalProject\\FinalProject\\Common\\Common.csproj",
+      "projectJsonPath": "C:\\Users\\krief\\Documents\\GitHub\\FinalProject\\FinalProject\\Common\\project.json",
       "packagesPath": "C:\\Users\\krief\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\krief\\Documents\\GitHub\\FinalProject\\FinalProject\\Common1\\obj\\",
+      "outputPath": "C:\\Users\\krief\\Documents\\GitHub\\FinalProject\\FinalProject\\Common\\obj\\",
       "projectStyle": "ProjectJson",
       "configFilePaths": [
         "C:\\Users\\krief\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -23,7 +23,7 @@ namespace Simulator
             Console.WriteLine("--------------------------------------------------------------" + Environment.NewLine);
             rnd = new Random();
 
-            timer = new Timer(30000);
+            timer = new Timer(15000);
             timer.Elapsed += Timer_Elapsed;
             timer.Start();
 

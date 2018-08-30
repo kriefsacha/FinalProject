@@ -9,7 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400" Background="DarkBlue" DataContextChanged="UserControl_DataContextChanged" IsEnabledChanged="UserControl_IsEnabledChanged" Loaded="UserControl_Loaded">
+    d:DesignWidth="400" Background="DarkBlue">
 
     <UserControl.Resources>
         <Converters:PlaneToPlaneNameConverter x:Key="PlaneToPlaneNameConverter"/>
@@ -18,13 +18,13 @@
     <StackPanel>
         <TextBlock Text="Airport Stations Details" FontSize="20" Foreground="DarkBlue" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
 
-        <ListView Name="InformationLV" Background="DarkBlue" ItemsSource="{Binding Stations}" >
+        <ListView Name="InformationLV" Background="DarkBlue" ItemsSource="{Binding Stations , Mode=TwoWay}" SelectionMode="None" >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Station " FontSize="16" Foreground="White" Margin="3"/>
-                        <TextBlock Text="{Binding Number}" FontSize="16" Foreground="White" Margin="3"/>
-                        <TextBlock Text="{Binding Plane , Converter={StaticResource PlaneToPlaneNameConverter}}" FontSize="16" Foreground="White" Margin="3"/>
+                        <TextBlock Text="{Binding Number , Mode=OneWay}" FontSize="16" Foreground="White" Margin="3"/>
+                        <TextBlock Text="{Binding Plane , Converter={StaticResource PlaneToPlaneNameConverter} , Mode=OneWay}" FontSize="16" Foreground="White" Margin="3"/>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

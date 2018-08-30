@@ -1,4 +1,6 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using System.Collections.ObjectModel;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -11,19 +13,14 @@ namespace Client.Controls
             this.InitializeComponent();
         }
 
-        private void UserControl_DataContextChanged(Windows.UI.Xaml.FrameworkElement sender, Windows.UI.Xaml.DataContextChangedEventArgs args)
-        {
-            var t = this;
-        }
+        public static readonly DependencyProperty StationsProperty = DependencyProperty.Register("Stations",typeof(ObservableCollection<Models.Station>) ,typeof(StationsDetails) ,
+                                                    new PropertyMetadata(null));
 
-        private void UserControl_IsEnabledChanged(object sender, Windows.UI.Xaml.DependencyPropertyChangedEventArgs e)
+        public ObservableCollection<Models.Station> Stations
         {
-            var t = this;
-        }
+            get { return (ObservableCollection<Models.Station>)GetValue(StationsProperty); }
 
-        private void UserControl_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            var t = this;
+            set { SetValue(StationsProperty, value); }
         }
     }
 }

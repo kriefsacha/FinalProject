@@ -162,7 +162,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common1\Common.csproj">
+    <ProjectReference Include="..\Common\Common.csproj">
       <Project>{14cd71fc-36e4-4c65-b575-30cca54b5b37}</Project>
       <Name>Common</Name>
     </ProjectReference>

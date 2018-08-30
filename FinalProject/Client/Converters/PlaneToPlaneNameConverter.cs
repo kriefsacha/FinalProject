@@ -12,13 +12,13 @@ namespace Client.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if(value is Plane plane)
+            if(value is string plane)
             {
-                if (plane != null) return plane.Name;
-                else return "";
+                if (plane != null && plane != "") return " : " + plane;
+                else return " : Available ";
             }
 
-            return "";
+            return " : Available";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

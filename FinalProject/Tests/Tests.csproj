@@ -96,7 +96,7 @@
       <Project>{7EEE6913-3E78-4B0D-A52F-A4AA787C599B}</Project>
       <Name>BL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Common1\Common.csproj">
+    <ProjectReference Include="..\Common\Common.csproj">
       <Project>{14CD71FC-36E4-4C65-B575-30CCA54B5B37}</Project>
       <Name>Common</Name>
     </ProjectReference>

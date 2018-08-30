@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientTest", "ClientTest\Cl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{36CC3F72-11E0-496E-96D8-ABAEF63E7F6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common1\Common.csproj", "{14CD71FC-36E4-4C65-B575-30CCA54B5B37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{14CD71FC-36E4-4C65-B575-30CCA54B5B37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -128,6 +128,8 @@ Global
 		{1DF73254-655A-451A-A1D8-2603B98B68C6}.Release|x86.ActiveCfg = Release|Any CPU
 		{1DF73254-655A-451A-A1D8-2603B98B68C6}.Release|x86.Build.0 = Release|Any CPU
 		{36CC3F72-11E0-496E-96D8-ABAEF63E7F6A}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{36CC3F72-11E0-496E-96D8-ABAEF63E7F6A}.Debug|Any CPU.Build.0 = Debug|x86
+		{36CC3F72-11E0-496E-96D8-ABAEF63E7F6A}.Debug|Any CPU.Deploy.0 = Debug|x86
 		{36CC3F72-11E0-496E-96D8-ABAEF63E7F6A}.Debug|ARM.ActiveCfg = Debug|ARM
 		{36CC3F72-11E0-496E-96D8-ABAEF63E7F6A}.Debug|ARM.Build.0 = Debug|ARM
 		{36CC3F72-11E0-496E-96D8-ABAEF63E7F6A}.Debug|ARM.Deploy.0 = Debug|ARM

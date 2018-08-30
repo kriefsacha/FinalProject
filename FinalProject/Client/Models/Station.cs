@@ -23,27 +23,22 @@ namespace Client.Models
             get { return _number; }
             set
             {
-                Notify(nameof(Number));
                 _number = value;
+                Notify(nameof(Number));
             }
         }
 
-        private Plane plane;
+        private string _planeName;
 
-        public Plane Plane
+        public string Plane
         {
-            get { return plane; }
+            get { return _planeName; }
             set
             {
+                _planeName = value;
                 Notify(nameof(Plane));
-                plane = value;
             }
         }
-
-        //public bool IsAvailable
-        //{
-        //    get { return Plane == null; }
-        //}
 
         public void Notify(string propName)
         {

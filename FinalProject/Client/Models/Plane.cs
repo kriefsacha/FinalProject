@@ -19,7 +19,19 @@ namespace Client.Models
             this.flightState = flightState;
         }
 
-        public string Name { get; set; }
+
+        private string name;
+
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                name = value;
+                Notify(nameof(Name));
+            }
+        }
+
 
         public int waitingTime { get; set; }
 
@@ -37,8 +49,8 @@ namespace Client.Models
             get { return _stationNumber; }
             set
             {
-                //if (value >= 0 && value < 9)
-                    _stationNumber = value;
+                //if (value >= 0 && value < 9)   
+                _stationNumber = value;
                 Notify(nameof(StationNumber));
             }
         }

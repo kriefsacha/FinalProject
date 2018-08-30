@@ -66,8 +66,8 @@
                     </UC:CanvasItemsControl.ItemsPanel>
                 </UC:CanvasItemsControl>
             </Grid>
-            <UC:FlightsDetails Height="170" Width="1200" Background="Black" Grid.Row="1" Grid.ColumnSpan="2"/>
-            <UC:StationsDetails Height="500" Width="400" Background="DarkGray" Grid.Column="1"/>
+            <UC:FlightsDetails Height="220" Width="1200" Background="Black" Grid.Row="1" Grid.ColumnSpan="2"/>
+            <UC:StationsDetails Height="500" Width="400" Background="DarkGray" Grid.Column="1" Stations="{x:Bind viewModel.Stations}"/>
         </Grid>
     </StackPanel>
 </Page>
