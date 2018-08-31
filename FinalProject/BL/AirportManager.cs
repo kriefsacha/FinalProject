@@ -89,7 +89,7 @@ namespace BL
                 Stations.Add(stationManager);
             }
 
-            waitingTimer = new Timer(30000);
+            waitingTimer = new Timer(15000);
             waitingTimer.Elapsed += Timer_Elapsed;
             waitingTimer.Start();
         }
