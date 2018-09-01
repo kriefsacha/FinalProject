@@ -1,16 +1,16 @@
 ﻿using Common;
-using Common.Interfaces;
 using Microsoft.AspNet.SignalR;
 using Server.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Server.Services
 {
     internal class HubService : IHubService
     {
+        /// <summary>
+        /// New departure/arrival planned
+        /// </summary>
+        /// <param name="plane">The new plane</param>
         public void DepartureOrArrival(Plane plane)
         {
             var context = GlobalHost.ConnectionManager.GetHubContext<AirportHub>();

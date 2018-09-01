@@ -1,24 +1,22 @@
 ﻿using Common.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Common
 {
+    /// <summary>
+    /// A relation between a station number and her next step
+    /// </summary>
     public class Relation
     {
-        public Relation(int stationId, string stepId, FlightState state)
+        public Relation(int stationId, string NextStepId, FlightState state)
         {
             StationId = stationId;
-            StepId = stepId;
+            this.NextStepId = NextStepId;
             State = state;
         }
 
         public int StationId { get; set; }
 
-        public string StepId { get; set; }
+        public string NextStepId { get; set; }
 
         public FlightState State { get; set; }
     }

@@ -8,12 +8,7 @@ using Server.Services;
 using SimpleInjector;
 using SimpleInjector.Integration.WebApi;
 using SimpleInjector.Lifestyles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
-using System.Web.Routing;
 
 namespace Server
 {
@@ -24,15 +19,15 @@ namespace Server
             var container = new Container();
             container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
 
-            // Register your types, for instance using the scoped lifestyle:
+            // Register your types, for instance:
             container.Register<IPlaneRepository, PlaneRepository>(Lifestyle.Singleton);
             container.Register<IStationRepository, StationRepository>(Lifestyle.Singleton);
             container.Register<IFlightRepository, FlightRepository>(Lifestyle.Singleton);
             container.Register<IQueueService, QueueService>(Lifestyle.Singleton);
-            container.Register<IAirportManager, AirportManager>(Lifestyle.Singleton);
+            container.Register<IControlTour, ControlTour>(Lifestyle.Singleton);
             container.Register<IDalService, DalService>(Lifestyle.Singleton);
             container.Register<IHubService, HubService>(Lifestyle.Singleton);
-            container.Register<IManager, Manager>(Lifestyle.Singleton);
+            container.Register<IServerManager, ServerManager>(Lifestyle.Singleton);
 
 
             // This is an extension method from the integration package.

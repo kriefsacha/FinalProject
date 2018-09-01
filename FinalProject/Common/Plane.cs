@@ -1,68 +1,63 @@
 ﻿using Common.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Common
 {
     public class Plane
     {
-        public Plane(string Name, DateTime ActionTime, int waitingTime, FlightState flightState)
+        public Plane(string Name, DateTime ActionDate, int waitingTime, FlightState flightState)
         {
             this.Name = Name;
-            this.ActionTime = ActionTime;
+            this.ActionDate = ActionDate;
             this.waitingTime = waitingTime;
             this.flightState = flightState;
         }
 
         public string Name { get; set; }
 
-        private int _stationNumber;
+        public int StationNumber { get; set; }
 
-        public int StationNumber
-        {
-            get { return _stationNumber; }
-            set
-            {
-                //if(value > 0 && value < 9)
-                _stationNumber = value;
-            }
-        }
+        public int PreviousStationNumber { get; set; }
 
-        private int _previousstationNumber;
-
-        public int PreviousStationNumber
-        {
-            get { return _previousstationNumber; }
-            set
-            {
-                //if(value > 0 && value < 9)
-                _previousstationNumber = value;
-            }
-        }
-
+        /// <summary>
+        /// Time that the plane waits in every station
+        /// </summary>
         public int waitingTime { get; set; }
 
-        public DateTime ActionTime { get; set; }
+        /// <summary>
+        /// Date that the plane will arrive/departure
+        /// </summary>
+        public DateTime ActionDate { get; set; }
 
+        /// <summary>
+        /// Arrive/Departure State
+        /// </summary>
         public FlightState flightState { get; set; }
 
-        public void SetStation(int id)
+        /// <summary>
+        /// Set the new station of the plane
+        /// </summary>
+        /// <param name="stationId">Number of the station</param>
+        public void SetStation(int stationId)
         {
             PreviousStationNumber = StationNumber;
-            StationNumber = id;
-            Moved?.Invoke(id, EventArgs.Empty);
+            StationNumber = stationId;
+            Moved?.Invoke(stationId, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// When the plane finished all his way
+        /// </summary>
         public void FinishWay()
         {
             SetStation(0);
         }
+
         public delegate void MovedHandler(int senderId, EventArgs e);
 
+        /// <summary>
+        /// Fires when SetStation is called in the new station for the previous station to be released and can continue to work
+        /// </summary>
         public event MovedHandler Moved;
-
     }
 }

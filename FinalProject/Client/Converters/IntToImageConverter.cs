@@ -4,6 +4,9 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace Client.Converters
 {
+    /// <summary>
+    /// Converter that gives us an Random plane image
+    /// </summary>
     public class IntToImageConverter: IValueConverter
     {       
         public object Convert(object value, Type targetType, object parameter, string language)

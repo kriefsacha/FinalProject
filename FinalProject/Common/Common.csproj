@@ -39,7 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\FlightState.cs" />
-    <Compile Include="Interfaces\IAirportManager.cs" />
+    <Compile Include="Interfaces\IControlTour.cs" />
     <Compile Include="Interfaces\IFlightRepository.cs" />
     <Compile Include="Interfaces\IPlaneRepository.cs" />
     <Compile Include="Interfaces\IStationRepository.cs" />

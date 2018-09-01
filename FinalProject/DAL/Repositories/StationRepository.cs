@@ -1,10 +1,7 @@
-﻿using Common;
-using Common.Interfaces;
+﻿using Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
@@ -39,7 +36,7 @@ namespace DAL.Repositories
 
                 foreach (var relation in DALRelations)
                 {
-                    relations.Add(new Common.Relation(relation.StationId, relation.StepId, relation.State));
+                    relations.Add(new Common.Relation(relation.StationId, relation.NextStepId, relation.State));
                 }
             }
 

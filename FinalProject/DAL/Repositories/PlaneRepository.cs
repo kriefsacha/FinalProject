@@ -1,21 +1,22 @@
 ﻿using Common;
 using Common.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
     public class PlaneRepository : IPlaneRepository
     {
+        /// <summary>
+        /// A plane is moving
+        /// </summary>
+        /// <param name="Plane">The plane that moves</param>
         public void MoveRequest(Plane Plane)
         {
             using (AirportDataModel context = new AirportDataModel())
             {
                 Station previous = null;
-
+                //If it's not his first station
                 if (Plane.PreviousStationNumber != 0)
                 {
                     previous = context.Stations.Where(s => s.Number == Plane.PreviousStationNumber).FirstOrDefault();

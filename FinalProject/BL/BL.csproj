@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AirportManager.cs" />
+    <Compile Include="ControlTour.cs" />
     <Compile Include="Interfaces\IQueueService.cs" />
     <Compile Include="Interfaces\IStationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

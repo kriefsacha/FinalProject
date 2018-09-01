@@ -3,32 +3,40 @@ using Common.Interfaces;
 using Server.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Server
 {
-    public class Manager : IManager
+    public class ServerManager : IServerManager
     {
-        IAirportManager airport;
+        IControlTour controlTour;
         IHubService hubService;
         IDalService dalService;
 
-        public Manager(IAirportManager airport, IHubService hubService, IDalService dalService)
+        public ServerManager(IControlTour controlTour, IHubService hubService, IDalService dalService)
         {
-            this.airport = airport;
+            this.controlTour = controlTour;
             this.dalService = dalService;
             this.hubService = hubService;
 
-            airport.onPlaneMoved += Airport_planeMoved;
-            airport.onError += Airport_onError;
+            controlTour.onPlaneMoved += Airport_planeMoved;
+            controlTour.onError += Airport_onError;
         }
 
+        /// <summary>
+        /// When the control tour is on error
+        /// </summary>
+        /// <param name="sender">The exception</param>
+        /// <param name="e"></param>
         private void Airport_onError(object sender, EventArgs e)
         {
             hubService.OnError(sender as Exception);
         }
 
+        /// <summary>
+        /// When a plane moved
+        /// </summary>
+        /// <param name="sender">The plane that moved</param>
+        /// <param name="e"></param>
         private void Airport_planeMoved(object sender, EventArgs e)
         {
             if (sender is Plane plane)
@@ -38,9 +46,13 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// When a new departure/arrival is planed
+        /// </summary>
+        /// <param name="plane">The new plane</param>
         public void DepartureOrArrival(Plane plane)
         {
-            airport.NewDepartureOrArrival(plane);
+            controlTour.NewDepartureOrArrival(plane);
             hubService.DepartureOrArrival(plane);
             dalService.DepartureOrArrival(plane);
         }

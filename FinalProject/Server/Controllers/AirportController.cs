@@ -1,9 +1,7 @@
 ﻿using Common;
-using Common.Interfaces;
 using Server.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -12,13 +10,17 @@ namespace Server.Controllers
 {
     public class AirportController : ApiController
     {
-        IManager manager;
+        IServerManager manager;
 
-        public AirportController(IManager manager)
+        public AirportController(IServerManager manager)
         {
             this.manager = manager;
         }
 
+        /// <summary>
+        /// New Departure or arrival planed
+        /// </summary>
+        /// <param name="Plane">The new plane</param>
         [HttpPost]
         public void DepartureOrArrival(Plane Plane)
         {

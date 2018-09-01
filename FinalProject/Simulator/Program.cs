@@ -1,14 +1,9 @@
 ﻿using Common;
 using Common.Enums;
-using Microsoft.AspNet.SignalR.Client;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 
 namespace Simulator
@@ -33,10 +28,15 @@ namespace Simulator
             }
         }
 
+        /// <summary>
+        /// Create new plane and planned it to departure/arrival
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             var Name = $"{GetLetter()}{GetLetter()}{GetNumber()}{GetNumber()}{GetNumber()}";
-            var ActionTime = GetActionTime();
+            var ActionDate = GetActionDate();
             var waitingTime = GetWaitingTime();
             FlightState flightState =  FlightState.Arrival;
 
@@ -50,7 +50,7 @@ namespace Simulator
                     break;
             }
 
-            Plane plane = new Plane(Name,ActionTime , waitingTime , flightState);
+            Plane plane = new Plane(Name,ActionDate , waitingTime , flightState);
 
             HttpClient httpClient = new HttpClient();
 
@@ -65,24 +65,35 @@ namespace Simulator
                 timer.Stop();
             }
             else
-                Console.WriteLine("Sending plane " + plane.Name + " to " + plane.flightState + " at : " + plane.ActionTime + " who will wait in all stations " + plane.waitingTime / 1000 + " seconds");
+                Console.WriteLine("Sending plane " + plane.Name + " to " + plane.flightState + " at : " + plane.ActionDate + " who will wait in all stations " + plane.waitingTime / 1000 + " seconds");
         }
 
+        /// <summary>
+        /// Get a letter from a to z
+        /// </summary>
+        /// <returns>The new letter</returns>
         private static string GetLetter()
         {
             int num = rnd.Next(0, 26);
             return ((char)('a' + num)).ToString().ToUpper();
         }
 
+        /// <summary>
+        /// Get a number betwen 0 and 10
+        /// </summary>
+        /// <returns>The new number</returns>
         private static int GetNumber()
         {
             return rnd.Next(0, 10);
         }
 
-        private static DateTime GetActionTime()
+        /// <summary>
+        /// Get a new action date ( date that the plane departure/arrive )
+        /// </summary>
+        /// <returns></returns>
+        private static DateTime GetActionDate()
         {
-            int range = 3;
-            return DateTime.Now.AddMinutes(rnd.Next(1, range));
+            return DateTime.Now.AddMinutes(rnd.Next(1,3));
         }
 
         private static int GetWaitingTime()

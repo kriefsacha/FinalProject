@@ -1,13 +1,7 @@
-﻿using Client.Converters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 
 namespace Client.Controls
@@ -17,12 +11,16 @@ namespace Client.Controls
         public static readonly DependencyProperty StationProperty =
             DependencyProperty.RegisterAttached("StationNumber", typeof(int), typeof(CanvasItemsControl), new PropertyMetadata(0, OnStationProperty));
 
-
+        /// <summary>
+        /// When the station number of a plane changes , fire a animation
+        /// </summary>
+        /// <param name="Plane"></param>
+        /// <param name="stationNumber"></param>
         private static void OnStationProperty(DependencyObject Plane, DependencyPropertyChangedEventArgs stationNumber)
         {
             FrameworkElement contentControl = (FrameworkElement)Plane;
 
-            var from = (int)stationNumber.OldValue;
+            //New value of the station number
             var to = (int)stationNumber.NewValue;
 
             var toX = GetStationLeft(to);
@@ -46,9 +44,7 @@ namespace Client.Controls
                 moveStoeyBoard.Begin();
             }
             else
-            {
                 contentControl.Visibility = Visibility.Collapsed;
-            }
         }
 
         protected override void PrepareContainerForItemOverride(
@@ -63,58 +59,42 @@ namespace Client.Controls
             base.PrepareContainerForItemOverride(element, item);
         }
 
+        /// <summary>
+        /// Returns the top of a station
+        /// </summary>
+        /// <param name="StationNumber">Number of the station</param>
+        /// <returns>Top</returns>
         private static int GetStationTop(int StationNumber)
         {
             if (StationNumber >= 1 && StationNumber <= 4)
-            {
                 return 0;
-            }
             else if (StationNumber == 5 || StationNumber == 8)
-            {
                 return 220;
-            }
-            if (StationNumber == 6 || StationNumber == 7)
-            {
+            else if (StationNumber == 6 || StationNumber == 7)
                 return 380;
-            }
-            else { return 0; }
-        }
-        private static int GetStationLeft(int StationNumber)
-        {
-            if (StationNumber == 1)
-            {
-                return 630;
-            }
-            if (StationNumber == 2)
-            {
-                return 420;
-            }
-            if (StationNumber == 3)
-            {
-                return 210;
-            }
-            if (StationNumber == 4)
-            {
+            else
                 return 0;
-            }
-            if (StationNumber == 5)
-            {
-                return 0;
-            }
-            if (StationNumber == 6)
-            {
-                return 0;
-            }
-            if (StationNumber == 7)
-            {
-                return 300;
-            }
-            if (StationNumber == 8)
-            {
-                return 300;
-            }
-            else { return 0; }
         }
 
+        /// <summary>
+        /// Returns the left of a station
+        /// </summary>
+        /// <param name="StationNumber">Number of the station</param>
+        /// <returns>Left</returns>
+        private static int GetStationLeft(int StationNumber)
+        {
+            switch (StationNumber)
+            {
+                case 1: return 630;
+                case 2: return 420;
+                case 3: return 210;
+                case 4: return 0;
+                case 5: return 0;
+                case 6: return 0;
+                case 7: return 300;
+                case 8: return 300;
+                default: return 0;
+            }
+        }
     }
 }

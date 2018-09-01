@@ -8,6 +8,9 @@ using Windows.UI.Xaml.Data;
 
 namespace Client.Converters
 {
+    /// <summary>
+    /// Converter that will shows a string from a plane
+    /// </summary>
     public class PlaneToPlaneNameConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

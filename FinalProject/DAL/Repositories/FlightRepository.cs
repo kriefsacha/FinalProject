@@ -3,21 +3,23 @@ using Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
     public class FlightRepository : IFlightRepository
     {
+        /// <summary>
+        /// New future departure or arrival to add
+        /// </summary>
+        /// <param name="plane">The new plane</param>
         public void DepartureOrArrival(Plane plane)
         {
             using (AirportDataModel context = new AirportDataModel())
             {
                 if (plane.flightState == Common.Enums.FlightState.Departure)
-                    context.Departures.Add(new Departure() { PlaneId = plane.Name, DatePlanned = plane.ActionTime , waitingTime = plane.waitingTime});
+                    context.Departures.Add(new Departure() { PlaneId = plane.Name, DatePlanned = plane.ActionDate, waitingTime = plane.waitingTime});
                 else
-                    context.Arrivals.Add(new Arrival() { PlaneId = plane.Name, DatePlanned = plane.ActionTime , waitingTime = plane.waitingTime});
+                    context.Arrivals.Add(new Arrival() { PlaneId = plane.Name, DatePlanned = plane.ActionDate, waitingTime = plane.waitingTime});
 
                 context.SaveChanges();
             }

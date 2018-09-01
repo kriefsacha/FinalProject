@@ -1,12 +1,5 @@
-﻿using Microsoft.AspNet.SignalR.Client;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Controls;
-using System;
-using System.Linq;
 using Windows.UI.Xaml;
 
 namespace Client.Controls

@@ -6,8 +6,15 @@ using System.Collections.Generic;
 
 namespace Tests
 {
+    /// <summary>
+    /// Class that gives us mock of what we want (if we need others we just have to add them here)  
+    /// </summary>
     public class MockService
     {
+        /// <summary>
+        /// Gives a mock of istationrepository 
+        /// </summary>
+        /// <returns>The mock</returns>
         internal Mock<IStationRepository> GetStationRepositoryMock()
         {
             var stationmock = new Mock<IStationRepository>();

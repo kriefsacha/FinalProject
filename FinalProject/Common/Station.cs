@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Common
+﻿namespace Common
 {
     public class Station
     {
-        public Station(int number, string stepkey)
+        public Station(int number, string StepKey)
         {
             Number = number;
-            stepKey = stepkey;
+            this.StepKey = StepKey;
         }
 
         public int Number { get; set; }
@@ -25,7 +19,7 @@ namespace Common
 
         private string _stepKey;
 
-        public string stepKey
+        public string StepKey
         {
             get
             {

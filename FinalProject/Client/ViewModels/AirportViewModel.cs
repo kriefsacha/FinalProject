@@ -1,9 +1,5 @@
-﻿using Client.Models;
-using Microsoft.AspNet.SignalR.Client;
+﻿using Microsoft.AspNet.SignalR.Client;
 using System.Collections.ObjectModel;
-using Windows.Foundation;
-using Windows.Foundation.Metadata;
-using Windows.UI.Xaml.Markup;
 using System;
 using Microsoft.Toolkit.Uwp.Helpers;
 using System.Linq;
@@ -11,7 +7,6 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using Common;
 
 namespace Client.ViewModels
 {
@@ -23,7 +18,6 @@ namespace Client.ViewModels
 
         public ObservableCollection<Models.Plane> FutureFlights { get; set; }
 
-
         public AirportViewModel()
         {
             Planes = new ObservableCollection<Models.Plane>();
@@ -33,6 +27,9 @@ namespace Client.ViewModels
             Init();
         }
 
+        /// <summary>
+        /// Initialize the view model
+        /// </summary>
         private void Init()
         {
             new Task(async () =>
@@ -40,23 +37,25 @@ namespace Client.ViewModels
                 HttpClient httpClient = new HttpClient();
                 var t = httpClient.GetAsync("http://localhost:63938/api/airport/GetCurrentStationsState");
                 t.Wait();
-                var result = JsonConvert.DeserializeObject<List<Common.Station>>(t.Result.Content.ReadAsStringAsync().Result);
-                foreach (var station in result)
+                if (t.Result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                    OnError(t.Result.Content.ReadAsStringAsync().Result);
+                else
                 {
-                    await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                    var result = JsonConvert.DeserializeObject<List<Common.Station>>(t.Result.Content.ReadAsStringAsync().Result);
+                    foreach (var station in result)
                     {
-                        if (station.Plane != null)
+                        await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
                         {
-                            Planes.Add(new Models.Plane(station.Plane.Name, DateTime.Now, 0, Common.Enums.FlightState.Arrival));
-                            Stations.Add(new Models.Station(station.Number) { Plane = station.Plane.Name });
-                        }
+                            if (station.Plane != null)
+                            {
+                                Planes.Add(new Models.Plane(station.Plane.Name, DateTime.Now, 0, Common.Enums.FlightState.Arrival));
+                                Stations.Add(new Models.Station(station.Number) { Plane = station.Plane.Name });
+                            }
 
-                        else
-                        {
-                            Stations.Add(new Models.Station(station.Number));
-                        }
-                    });
-
+                            else
+                                Stations.Add(new Models.Station(station.Number));
+                        });
+                    }
                 }
             }).Start();
 
@@ -65,10 +64,15 @@ namespace Client.ViewModels
                 HttpClient httpClient = new HttpClient();
                 var t = httpClient.GetAsync("http://localhost:63938/api/airport/GetFutureDeparturesAndArrivals");
                 t.Wait();
-                var result = JsonConvert.DeserializeObject<List<Common.Plane>>(t.Result.Content.ReadAsStringAsync().Result);
-                foreach (var plane in result)
+                if (t.Result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                    OnError(t.Result.Content.ReadAsStringAsync().Result);
+                else
                 {
-                    FutureFlights.Add(new Models.Plane(plane.Name, plane.ActionTime, plane.waitingTime, plane.flightState));
+                    var result = JsonConvert.DeserializeObject<List<Common.Plane>>(t.Result.Content.ReadAsStringAsync().Result);
+                    foreach (var plane in result)
+                    {
+                        FutureFlights.Add(new Models.Plane(plane.Name, plane.ActionDate, plane.waitingTime, plane.flightState));
+                    }
                 }
             }).Start();
 
@@ -80,28 +84,37 @@ namespace Client.ViewModels
             hubConnection.Start();
         }
 
+        /// <summary>
+        /// New departure/arrival planed
+        /// </summary>
+        /// <param name="plane">The new plane</param>
         private async void DepartureOrArrival(Common.Plane plane)
         {
             await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
             {
-                FutureFlights.Add(new Models.Plane(plane.Name, plane.ActionTime, plane.waitingTime, plane.flightState));
-                var sortedFlights = FutureFlights.OrderBy(f => f.ActionTime).ToList();
+                FutureFlights.Add(new Models.Plane(plane.Name, plane.ActionDate, plane.waitingTime, plane.flightState));
+                var sortedFlights = FutureFlights.OrderBy(f => f.ActionDate).ToList();
                 FutureFlights.Clear();
 
                 foreach (var flight in sortedFlights)
-                FutureFlights.Add(flight);
+                    FutureFlights.Add(flight);
             });
         }
 
+        /// <summary>
+        /// Plane is moving
+        /// </summary>
+        /// <param name="plane"></param>
         private async void Moved(Common.Plane plane)
         {
             await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
             {
+                //If it's not his last station
                 if (plane.StationNumber != 0)
                 {
                     var pl = Planes.Where(p => p.Name == plane.Name).FirstOrDefault();
                     if (pl == null)
-                        Planes.Add(new Models.Plane(plane.Name, plane.ActionTime, plane.waitingTime, plane.flightState) { StationNumber = plane.StationNumber });
+                        Planes.Add(new Models.Plane(plane.Name, plane.ActionDate, plane.waitingTime, plane.flightState) { StationNumber = plane.StationNumber });
                     else
                         pl.StationNumber = plane.StationNumber;
                 }
@@ -120,6 +133,7 @@ namespace Client.ViewModels
                     nextstation.Plane = plane.Name;
                 }
 
+                //if it's his first station
                 if (plane.PreviousStationNumber == 0)
                 {
                     var flight = FutureFlights.Where(f => f.Name == plane.Name).FirstOrDefault();

@@ -122,8 +122,8 @@
   <ItemGroup>
     <Compile Include="Interfaces\IDalService.cs" />
     <Compile Include="Interfaces\IHubService.cs" />
-    <Compile Include="Interfaces\IManager.cs" />
-    <Compile Include="Manager.cs" />
+    <Compile Include="Interfaces\IServerManager.cs" />
+    <Compile Include="ServerManager.cs" />
     <Compile Include="Services\AirportHub.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AirportController.cs" />

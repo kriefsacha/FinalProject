@@ -1,24 +1,20 @@
 ﻿using Common.Enums;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Client.Models
 {
     public class Plane : INotifyPropertyChanged
     {
+        Random r = new Random();
 
-        public Plane(string Name, DateTime ActionTime, int waitingTime, FlightState flightState)
+        public Plane(string Name, DateTime ActionDate, int waitingTime, FlightState flightState)
         {
             this.Name = Name;
-            this.ActionTime = ActionTime;
+            this.ActionDate = ActionDate;
             this.waitingTime = waitingTime;
             this.flightState = flightState;
         }
-
 
         private string name;
 
@@ -32,34 +28,30 @@ namespace Client.Models
             }
         }
 
-
         public int waitingTime { get; set; }
 
-        public DateTime ActionTime { get; set; }
+        public DateTime ActionDate { get; set; }
 
         public FlightState flightState { get; set; }
 
         private int _stationNumber;
-        Random r = new Random();
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public int StationNumber
         {
             get { return _stationNumber; }
             set
             {
-                //if (value >= 0 && value < 9)   
                 _stationNumber = value;
                 Notify(nameof(StationNumber));
             }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public void Notify(string propName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
-
 
         private int _randomPicture;
 
@@ -72,7 +64,5 @@ namespace Client.Models
                 return _randomPicture;
             }
         }
-
-
     }
 }

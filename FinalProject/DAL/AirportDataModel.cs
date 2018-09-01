@@ -1,12 +1,10 @@
+using Common.Enums;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
+
 namespace DAL
 {
-    using Common;
-    using Common.Enums;
-    using Microsoft.Azure;
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using System.Data.Entity;
-
     public class AirportDataModel : DbContext
     {
         //static readonly string connectionString = CloudConfigurationManager.GetSetting("dbconnectionstring");
@@ -90,7 +88,7 @@ namespace DAL
 
         public int StationId { get; set; }
 
-        public string StepId { get; set; }
+        public string NextStepId { get; set; }
 
         public FlightState State { get; set; }
     }

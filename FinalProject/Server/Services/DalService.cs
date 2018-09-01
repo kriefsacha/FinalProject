@@ -1,14 +1,11 @@
 ﻿using Common;
 using Common.Interfaces;
 using Server.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Server.Services
 {
-    public class DalService : IDalService
+    internal class DalService : IDalService
     {
         IFlightRepository flightRepository;
         IPlaneRepository planeRepository;
