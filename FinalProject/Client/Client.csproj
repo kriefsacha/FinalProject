@@ -119,9 +119,24 @@
     <None Include="Client_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Arrows\BlueLeft.jpg" />
+    <Content Include="Assets\Arrows\DownBrown.jpg" />
+    <Content Include="Assets\Arrows\LeftGreen.jpg" />
+    <Content Include="Assets\Arrows\UpandDown.jpg" />
+    <Content Include="Assets\Arrows\UpBlueArrow.png" />
+    <Content Include="Assets\Numbers\1.jpg" />
+    <Content Include="Assets\Numbers\2.jpg" />
+    <Content Include="Assets\Numbers\3.jpg" />
+    <Content Include="Assets\Numbers\4.jpg" />
+    <Content Include="Assets\Numbers\5.jpg" />
+    <Content Include="Assets\Numbers\6.jpg" />
+    <Content Include="Assets\Numbers\7.jpg" />
+    <Content Include="Assets\Numbers\8.jpg" />
     <Content Include="Assets\Planes\1.png" />
     <Content Include="Assets\Planes\2.png" />
     <Content Include="Assets\Planes\3.png" />
+    <Content Include="Assets\Planes\4.png" />
+    <Content Include="Assets\Planes\5.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

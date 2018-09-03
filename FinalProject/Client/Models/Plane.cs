@@ -59,7 +59,7 @@ namespace Client.Models
         {
             get
             {
-                int currentNumber = r.Next(1, 4);
+                int currentNumber = r.Next(1, 6);
                 _randomPicture = currentNumber;
                 return _randomPicture;
             }

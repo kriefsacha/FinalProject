@@ -35,6 +35,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition Height="60"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -42,17 +43,32 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Border Background="Cyan" />
-                <Border  Grid.Column="1"  Background="Green" />
-                <Border Grid.Column="2" Background="GreenYellow" />
-                <Border Grid.Column="3" Background="LightGreen" />
-                <Border Grid.Row="1" Background="Orange" />
-                <Border Grid.Row="1" Grid.Column="1" Background="Wheat" />
-                <Border Grid.Row="1" Grid.Column="2" Background="LightYellow" />
-                <Border Grid.Row="2" Background="SaddleBrown" />
-                <Border Grid.Row="2" Grid.Column="2" Background="RosyBrown" />
-                <Border Grid.Row="2" Grid.Column="1" Background="SandyBrown" />
+                <Border BorderBrush="Cyan" BorderThickness="30" Background="White"/>
+                <Border  Grid.Column="1"  BorderBrush="Green" BorderThickness="30" Background="White"/>
+                <Border Grid.Column="2" BorderBrush="GreenYellow" BorderThickness="30" Background="White"/>
+                <Border Grid.Column="3" BorderBrush="LightGreen" BorderThickness="30" Background="White"/>
+                <Border Grid.Row="1" BorderBrush="Orange" BorderThickness="30" Background="White"/>
+                <Border Grid.Row="1" Grid.Column="1" BorderBrush="Wheat" BorderThickness="30" Background="White"/>
+                <Border Grid.Row="1" Grid.Column="2" BorderBrush="LightYellow" BorderThickness="30" Background="White"/>
+                <Border Grid.Row="2" BorderBrush="SaddleBrown" BorderThickness="30" Background="White"/>
+                <Border Grid.Row="2" Grid.Column="2" BorderBrush="RosyBrown" BorderThickness="30" Background="White"/>
+                <Border Grid.Row="2" Grid.Column="1" BorderBrush="SandyBrown" BorderThickness="30" Background="White"/>
+                <Border Grid.Row="3" Background="DarkGreen" Grid.ColumnSpan="4" BorderBrush="White"/>
+                <Image Grid.Row="0" Grid.Column="0" Source="ms-appx:///Assets\Arrows\LeftGreen.jpg" VerticalAlignment="Center" HorizontalAlignment="Left" Width="30" Height="30"/>
+                <Image Grid.Row="2" Grid.Column="0" Source="ms-appx:///Assets\Arrows\UpandDown.jpg" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="40" Height="40"/>
+                <Image Grid.Row="2" Grid.Column="1" Source="ms-appx:///Assets\Arrows\UpandDown.jpg" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="40" Height="40"/>
                 
+                <TextBlock Grid.Row="3" Grid.ColumnSpan="4" Name="tbMultiLine" TextWrapping="Wrap" Text="{x:Bind viewModel.Messages}" FontSize="20" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                
+                <Image Source="ms-appx:///Assets\Numbers\1.jpg" Grid.Column="3" Width="90" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Image Source="ms-appx:///Assets\Numbers\2.jpg" Grid.Column="2" Width="90" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Image Source="ms-appx:///Assets\Numbers\3.jpg" Grid.Column="1" Width="90" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Image Source="ms-appx:///Assets\Numbers\4.jpg" Width="90" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Image Source="ms-appx:///Assets\Numbers\5.jpg" Grid.Row="1" Width="90" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Image Source="ms-appx:///Assets\Numbers\6.jpg" Grid.Row="2" Width="90" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Image Source="ms-appx:///Assets\Numbers\7.jpg" Grid.Row="2" Grid.Column="1" Width="90" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Image Source="ms-appx:///Assets\Numbers\8.jpg" Grid.Row="1" Grid.Column="1" Width="90" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
                 <UC:CanvasItemsControl ItemsSource="{x:Bind viewModel.Planes}" x:Name="MovementCanvas">
                     <UC:CanvasItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="Model:Plane">

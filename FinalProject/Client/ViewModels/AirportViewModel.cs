@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Windows.Input;
+using Windows.UI.Popups;
+using System.Data.Common;
+
+
 
 namespace Client.ViewModels
 {
@@ -18,14 +23,23 @@ namespace Client.ViewModels
 
         public ObservableCollection<Models.Plane> FutureFlights { get; set; }
 
+        public string Messages { get; set; }
+
+       
+
+
         public AirportViewModel()
+            
         {
+            Messages = "Initializing..." + DateTime.Now.ToString(" MMMM dd, yyyy H: mm:ss"); //delete the ss?
             Planes = new ObservableCollection<Models.Plane>();
             Stations = new ObservableCollection<Models.Station>();
             FutureFlights = new ObservableCollection<Models.Plane>();
-
             Init();
         }
+       
+        
+
 
         /// <summary>
         /// Initialize the view model
@@ -35,8 +49,18 @@ namespace Client.ViewModels
             new Task(async () =>
             {
                 HttpClient httpClient = new HttpClient();
-                var t = httpClient.GetAsync("http://localhost:63938/api/airport/GetCurrentStationsState");
-                t.Wait();
+                httpClient.Timeout = TimeSpan.FromSeconds(30);
+                Task<HttpResponseMessage> t = null;
+                try
+                {
+                    t = httpClient.GetAsync("http://localhost:63938/api/airport/GetCurrentStationsState");
+                    t.Wait();
+                }
+
+                catch(Exception exc)
+                {
+                    OnError(exc.Message);
+                }
                 if (t.Result.StatusCode == System.Net.HttpStatusCode.BadRequest)
                     OnError(t.Result.Content.ReadAsStringAsync().Result);
                 else
@@ -62,8 +86,18 @@ namespace Client.ViewModels
             new Task(() =>
             {
                 HttpClient httpClient = new HttpClient();
-                var t = httpClient.GetAsync("http://localhost:63938/api/airport/GetFutureDeparturesAndArrivals");
-                t.Wait();
+                httpClient.Timeout = TimeSpan.FromSeconds(30);
+                Task<HttpResponseMessage> t = null;
+                try
+                {
+                    t = httpClient.GetAsync("http://localhost:63938/api/airport/GetFutureDeparturesAndArrivals");
+                    t.Wait();
+                }
+                catch(Exception exc)
+                {
+                    OnError(exc.Message);
+                }
+            
                 if (t.Result.StatusCode == System.Net.HttpStatusCode.BadRequest)
                     OnError(t.Result.Content.ReadAsStringAsync().Result);
                 else
@@ -75,6 +109,7 @@ namespace Client.ViewModels
                     }
                 }
             }).Start();
+           
 
             HubConnection hubConnection = new HubConnection("http://localhost:63938/");
             var proxy = hubConnection.CreateHubProxy("AirportHub");
@@ -147,7 +182,9 @@ namespace Client.ViewModels
 
         private void OnError(string errorMessage)
         {
-            //TO DO POP UP ERROR MESSAGE
+            
         }
+
+       
     }
 }

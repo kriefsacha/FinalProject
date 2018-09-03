@@ -15,7 +15,7 @@
             <DataTemplate>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding Name}" FontSize="14" Foreground="Yellow" Margin="4,0,4,0"/>
-                    <TextBlock Text="{Binding ActionTime}" FontSize="14" Foreground="Yellow" Margin="4,0,4,0"/>
+                    <TextBlock Text="{Binding ActionDate}" FontSize="14" Foreground="Yellow" Margin="4,0,4,0"/>
                     <TextBlock Text="{Binding flightState}" FontSize="14" Foreground="Yellow" Margin="4,0,4,0"/>
                     </StackPanel>
             </DataTemplate>

@@ -67,11 +67,11 @@ namespace Client.Controls
         private static int GetStationTop(int StationNumber)
         {
             if (StationNumber >= 1 && StationNumber <= 4)
-                return 0;
+                return 35;
             else if (StationNumber == 5 || StationNumber == 8)
-                return 220;
+                return 180;
             else if (StationNumber == 6 || StationNumber == 7)
-                return 380;
+                return 320;
             else
                 return 0;
         }
@@ -85,14 +85,14 @@ namespace Client.Controls
         {
             switch (StationNumber)
             {
-                case 1: return 630;
-                case 2: return 420;
-                case 3: return 210;
-                case 4: return 0;
-                case 5: return 0;
-                case 6: return 0;
-                case 7: return 300;
-                case 8: return 300;
+                case 1: return 660;
+                case 2: return 460;
+                case 3: return 260;
+                case 4: return 30;
+                case 5: return 30;
+                case 6: return 30;
+                case 7: return 270;
+                case 8: return 250;
                 default: return 0;
             }
         }
