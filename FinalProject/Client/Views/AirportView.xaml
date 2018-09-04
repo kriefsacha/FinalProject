@@ -60,6 +60,7 @@
                 <ScrollViewer Grid.Row="3" Grid.ColumnSpan="4" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" VerticalScrollMode="Auto" Height="40">
                     <TextBlock Text="{x:Bind viewModel.Messages , Mode=OneWay}" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
                 </ScrollViewer>
+                <TextBlock Grid.Row="2" Grid.Column="3" VerticalAlignment="Bottom" HorizontalAlignment="Left" Text="History log ->" FontWeight="ExtraBold" FontSize="16"></TextBlock>
                 <Image Source="ms-appx:///Assets\Numbers\1.jpg" Grid.Column="3" Width="90" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Image Source="ms-appx:///Assets\Numbers\2.jpg" Grid.Column="2" Width="90" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Image Source="ms-appx:///Assets\Numbers\3.jpg" Grid.Column="1" Width="90" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"/>

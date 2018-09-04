@@ -18467,23 +18467,28 @@
     ".NETPlatform,Version=v5.0": []
   },
   "packageFolders": {
-    "C:\\Users\\krief\\.nuget\\packages\\": {}
+    "C:\\Users\\עינת\\.nuget\\packages\\": {},
+    "C:\\Program Files\\Microsoft SDKs\\NuGetPackagesFallback\\": {}
   },
   "project": {
     "restore": {
-      "projectUniqueName": "C:\\Users\\krief\\Documents\\GitHub\\FinalProject\\FinalProject\\Common\\Common.csproj",
+      "projectUniqueName": "C:\\Users\\עינת\\Documents\\GitHub\\FinalProject\\FinalProject\\Common\\Common.csproj",
       "projectName": "Common",
-      "projectPath": "C:\\Users\\krief\\Documents\\GitHub\\FinalProject\\FinalProject\\Common\\Common.csproj",
-      "projectJsonPath": "C:\\Users\\krief\\Documents\\GitHub\\FinalProject\\FinalProject\\Common\\project.json",
-      "packagesPath": "C:\\Users\\krief\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\krief\\Documents\\GitHub\\FinalProject\\FinalProject\\Common\\obj\\",
+      "projectPath": "C:\\Users\\עינת\\Documents\\GitHub\\FinalProject\\FinalProject\\Common\\Common.csproj",
+      "projectJsonPath": "C:\\Users\\עינת\\Documents\\GitHub\\FinalProject\\FinalProject\\Common\\project.json",
+      "packagesPath": "C:\\Users\\עינת\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\עינת\\Documents\\GitHub\\FinalProject\\FinalProject\\Common\\obj\\",
       "projectStyle": "ProjectJson",
+      "fallbackFolders": [
+        "C:\\Program Files\\Microsoft SDKs\\NuGetPackagesFallback\\"
+      ],
       "configFilePaths": [
-        "C:\\Users\\krief\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\עינת\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       }
     },
