@@ -12,7 +12,7 @@ namespace DAL.Repositories
         /// New future departure or arrival to add
         /// </summary>
         /// <param name="plane">The new plane</param>
-        public void DepartureOrArrival(Plane plane)
+        public void DepartureOrArrival(Common.Plane plane)
         {
             using (AirportDataModel context = new AirportDataModel())
             {
@@ -25,9 +25,9 @@ namespace DAL.Repositories
             }
         }
 
-        public List<Plane> GetFutureDeparturesAndArrivals()
+        public List<Common.Plane> GetFutureDeparturesAndArrivals()
         {
-            List<Plane> FutureDeparturesAndArrivals = new List<Plane>();
+            List<Common.Plane> FutureDeparturesAndArrivals = new List<Common.Plane>();
 
             using (AirportDataModel context = new AirportDataModel())
             {
@@ -35,14 +35,14 @@ namespace DAL.Repositories
 
                 foreach (var futureDeparture in DalFutureDepartures)
                 {
-                    FutureDeparturesAndArrivals.Add(new Plane(futureDeparture.PlaneId, futureDeparture.DatePlanned, futureDeparture.waitingTime, Common.Enums.FlightState.Departure));
+                    FutureDeparturesAndArrivals.Add(new Common.Plane(futureDeparture.PlaneId, futureDeparture.DatePlanned, futureDeparture.waitingTime, Common.Enums.FlightState.Departure));
                 }
 
                 var DalFutureArrivals = context.Arrivals.Where(a => a.DatePlanned > DateTime.Now).OrderBy(a => a.DatePlanned).ToList();
 
                 foreach (var futureArrival in DalFutureArrivals)
                 {
-                    FutureDeparturesAndArrivals.Add(new Plane(futureArrival.PlaneId, futureArrival.DatePlanned, futureArrival.waitingTime, Common.Enums.FlightState.Arrival));
+                    FutureDeparturesAndArrivals.Add(new Common.Plane(futureArrival.PlaneId, futureArrival.DatePlanned, futureArrival.waitingTime, Common.Enums.FlightState.Arrival));
                 }
             }
             return FutureDeparturesAndArrivals;

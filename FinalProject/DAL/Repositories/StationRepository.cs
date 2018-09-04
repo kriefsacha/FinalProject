@@ -1,5 +1,4 @@
 ﻿using Common.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,8 +16,8 @@ namespace DAL.Repositories
 
                 foreach (var station in DALStations)
                 {
-                    if (!station.IsAvailable && station.PlaneId != null && station.PlaneId != "")
-                        stations.Add(new Common.Station(station.Number, station.stepKey ) { Plane = new Common.Plane(station.PlaneId , DateTime.Now , 0 , Common.Enums.FlightState.Arrival) }); // To change !!!
+                    if (!station.IsAvailable && station.PlaneId != null && station.Plane != null && station.Plane.Name != "")
+                        stations.Add(new Common.Station(station.Number, station.stepKey ) { Plane = new Common.Plane(station.Plane.Name , station.Plane.ActionDate , station.Plane.waitingTime , station.Plane.flightState) });
                     else
                         stations.Add(new Common.Station(station.Number, station.stepKey) );
                 }

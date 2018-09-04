@@ -59,7 +59,7 @@ namespace Simulator
             var t = httpClient.PostAsync("http://localhost:63938/api/airport/DepartureOrArrival", httpContent);
             t.Wait();
 
-            if (t.Result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            if (t.Result.StatusCode == System.Net.HttpStatusCode.BadRequest || t.Result.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
                 Console.WriteLine("Error : " + t.Result.Content.ReadAsStringAsync().Result);
                 timer.Stop();

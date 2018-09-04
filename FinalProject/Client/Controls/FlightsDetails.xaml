@@ -3,19 +3,24 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Client.Controls"
+    xmlns:Converters="using:Client.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="100"
     d:DesignWidth="200" 
     Background="Black">
+
+    <UserControl.Resources>
+        <Converters:DateTimeToDateFormatConverter x:Key="DateTimeToDateFormatConverter"/>
+    </UserControl.Resources>
     
     <ListView Name="InformationLV" Background="Black" Height="220" ItemsSource="{Binding FutureFlights , Mode=TwoWay}">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding Name}" FontSize="14" Foreground="Yellow" Margin="4,0,4,0"/>
-                    <TextBlock Text="{Binding ActionDate}" FontSize="14" Foreground="Yellow" Margin="4,0,4,0"/>
+                    <TextBlock Text="{Binding ActionDate , Converter={StaticResource DateTimeToDateFormatConverter}}" FontSize="14" Foreground="Yellow" Margin="4,0,4,0"/>
                     <TextBlock Text="{Binding flightState}" FontSize="14" Foreground="Yellow" Margin="4,0,4,0"/>
                     </StackPanel>
             </DataTemplate>

@@ -57,9 +57,9 @@
                 <Image Grid.Row="0" Grid.Column="0" Source="ms-appx:///Assets\Arrows\LeftGreen.jpg" VerticalAlignment="Center" HorizontalAlignment="Left" Width="30" Height="30"/>
                 <Image Grid.Row="2" Grid.Column="0" Source="ms-appx:///Assets\Arrows\UpandDown.jpg" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="40" Height="40"/>
                 <Image Grid.Row="2" Grid.Column="1" Source="ms-appx:///Assets\Arrows\UpandDown.jpg" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="40" Height="40"/>
-                
-                <TextBlock Grid.Row="3" Grid.ColumnSpan="4" Name="tbMultiLine" TextWrapping="Wrap" Text="{x:Bind viewModel.Messages}" FontSize="20" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
-                
+                <ScrollViewer Grid.Row="3" Grid.ColumnSpan="4" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" VerticalScrollMode="Auto" Height="40">
+                    <TextBlock Text="{x:Bind viewModel.Messages , Mode=OneWay}" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                </ScrollViewer>
                 <Image Source="ms-appx:///Assets\Numbers\1.jpg" Grid.Column="3" Width="90" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Image Source="ms-appx:///Assets\Numbers\2.jpg" Grid.Column="2" Width="90" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Image Source="ms-appx:///Assets\Numbers\3.jpg" Grid.Column="1" Width="90" Height="70" HorizontalAlignment="Center" VerticalAlignment="Center"/>

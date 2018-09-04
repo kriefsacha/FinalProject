@@ -7,15 +7,12 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Windows.Input;
-using Windows.UI.Popups;
-using System.Data.Common;
-
-
+using System.ComponentModel;
+using System.Text;
 
 namespace Client.ViewModels
 {
-    public class AirportViewModel
+    public class AirportViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<Models.Plane> Planes { get; set; }
 
@@ -23,30 +20,46 @@ namespace Client.ViewModels
 
         public ObservableCollection<Models.Plane> FutureFlights { get; set; }
 
-        public string Messages { get; set; }
 
-       
+        private string _messages;
 
-
-        public AirportViewModel()
-            
+        public string Messages
         {
-            Messages = "Initializing..." + DateTime.Now.ToString(" MMMM dd, yyyy H: mm:ss"); //delete the ss?
+            get { return _messages; }
+            set {
+                _messages = value;
+                Notify(nameof(Messages));
+            }
+        }
+
+
+        public AirportViewModel()          
+        {
+            Messages = "";
             Planes = new ObservableCollection<Models.Plane>();
             Stations = new ObservableCollection<Models.Station>();
             FutureFlights = new ObservableCollection<Models.Plane>();
             Init();
         }
-       
-        
 
+        public event PropertyChangedEventHandler PropertyChanged;
 
+        private async void Notify(string propName)
+        {
+            await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+            });
+        }
         /// <summary>
         /// Initialize the view model
         /// </summary>
         private void Init()
         {
-            new Task(async () =>
+
+            Log("Initializing ..");
+
+            var t1 = new Task(async () =>
             {
                 HttpClient httpClient = new HttpClient();
                 httpClient.Timeout = TimeSpan.FromSeconds(30);
@@ -61,7 +74,7 @@ namespace Client.ViewModels
                 {
                     OnError(exc.Message);
                 }
-                if (t.Result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                if (t.Result.StatusCode == System.Net.HttpStatusCode.BadRequest || t.Result.StatusCode == System.Net.HttpStatusCode.InternalServerError)
                     OnError(t.Result.Content.ReadAsStringAsync().Result);
                 else
                 {
@@ -81,9 +94,9 @@ namespace Client.ViewModels
                         });
                     }
                 }
-            }).Start();
+            });
 
-            new Task(() =>
+            var t2 = new Task(async () =>
             {
                 HttpClient httpClient = new HttpClient();
                 httpClient.Timeout = TimeSpan.FromSeconds(30);
@@ -98,25 +111,35 @@ namespace Client.ViewModels
                     OnError(exc.Message);
                 }
             
-                if (t.Result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                if (t.Result.StatusCode == System.Net.HttpStatusCode.BadRequest || t.Result.StatusCode == System.Net.HttpStatusCode.InternalServerError)
                     OnError(t.Result.Content.ReadAsStringAsync().Result);
                 else
                 {
                     var result = JsonConvert.DeserializeObject<List<Common.Plane>>(t.Result.Content.ReadAsStringAsync().Result);
                     foreach (var plane in result)
                     {
-                        FutureFlights.Add(new Models.Plane(plane.Name, plane.ActionDate, plane.waitingTime, plane.flightState));
+                        await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+                        {
+                            FutureFlights.Add(new Models.Plane(plane.Name, plane.ActionDate, plane.waitingTime, plane.flightState));
+                        });
                     }
                 }
-            }).Start();
-           
+            });
 
-            HubConnection hubConnection = new HubConnection("http://localhost:63938/");
-            var proxy = hubConnection.CreateHubProxy("AirportHub");
-            proxy.On<Common.Plane>("departureOrArrival", DepartureOrArrival);
-            proxy.On<Common.Plane>("moved", Moved);
-            proxy.On<string>("onerror", OnError);
-            hubConnection.Start();
+            var t3 = new Task(() => {
+                HubConnection hubConnection = new HubConnection("http://localhost:63938/");
+                var proxy = hubConnection.CreateHubProxy("AirportHub");
+                proxy.On<Common.Plane>("departureOrArrival", DepartureOrArrival);
+                proxy.On<Common.Plane>("moved", Moved);
+                proxy.On<string>("onerror", OnError);
+                hubConnection.Start();
+            });
+
+            t1.Start();
+            t2.Start();
+            t3.Start();
+
+            Task.WhenAll(t1, t2, t3).ContinueWith((t) => { Log("Finished initialization ! "); });   
         }
 
         /// <summary>
@@ -182,9 +205,15 @@ namespace Client.ViewModels
 
         private void OnError(string errorMessage)
         {
-            
+            Log(errorMessage);
         }
 
-       
+       private void Log(string message)
+        {
+            StringBuilder str = new StringBuilder();
+            str.AppendLine(DateTime.Now.ToString("dd MMMM yyyy HH:mm:ss") + " -> " + message + Environment.NewLine);
+            str.AppendLine(Messages);
+            Messages = str.ToString();
+        }
     }
 }

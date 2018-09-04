@@ -102,6 +102,7 @@
     <Compile Include="Controls\StationsDetails.xaml.cs">
       <DependentUpon>StationsDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\DateTimeToDateFormatConverter.cs" />
     <Compile Include="Converters\IntToImageConverter.cs" />
     <Compile Include="Converters\PlaneToPlaneNameConverter.cs" />
     <Compile Include="Models\Plane.cs" />

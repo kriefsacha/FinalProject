@@ -1,15 +1,9 @@
-﻿using Common;
-using Common.Enums;
-using System;
-using System.Collections.Generic;
+﻿using Common.Enums;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAL
 {
-    class AirportInitializer : DropCreateDatabaseAlways<AirportDataModel>
+    class AirportInitializer : CreateDatabaseIfNotExists<AirportDataModel>
     {
         protected override void Seed(AirportDataModel context)
         {

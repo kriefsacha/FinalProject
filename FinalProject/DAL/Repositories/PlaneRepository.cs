@@ -1,5 +1,4 @@
-﻿using Common;
-using Common.Interfaces;
+﻿using Common.Interfaces;
 using System;
 using System.Linq;
 
@@ -11,7 +10,7 @@ namespace DAL.Repositories
         /// A plane is moving
         /// </summary>
         /// <param name="Plane">The plane that moves</param>
-        public void MoveRequest(Plane Plane)
+        public void MoveRequest(Common.Plane Plane)
         {
             using (AirportDataModel context = new AirportDataModel())
             {
@@ -24,6 +23,7 @@ namespace DAL.Repositories
                     if (previous != null)
                     {
                         previous.PlaneId = null;
+                        previous.Plane = null;
                         context.Histories.Add(new History() { StationNumber = previous.Number, DateOut = DateTime.Now, DateIn = null, PlaneId = Plane.Name });
                     }
                 }
@@ -32,7 +32,18 @@ namespace DAL.Repositories
 
                 if (next != null)
                 {
-                    next.PlaneId = Plane.Name;
+                    DAL.Plane DalPlane = context.Planes.Where(p=>p.Name == Plane.Name).FirstOrDefault();
+                    if(DalPlane == null)
+                    {
+                        DalPlane = new Plane() { Name = Plane.Name, ActionDate = Plane.ActionDate, flightState = Plane.flightState, PreviousStationNumber = Plane.PreviousStationNumber, StationNumber = Plane.StationNumber, waitingTime = Plane.waitingTime };
+                        context.Planes.Add(DalPlane);
+                    }
+
+                    DalPlane.PreviousStationNumber = Plane.StationNumber;
+                    DalPlane.StationNumber = Plane.StationNumber;
+
+                    next.PlaneId = DalPlane.Id;
+                    next.Plane = DalPlane;
                     context.Histories.Add(new History() { StationNumber = next.Number, DateIn = DateTime.Now, DateOut = null, PlaneId = Plane.Name });
                 }
 
