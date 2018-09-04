@@ -26,14 +26,15 @@ namespace Client.ViewModels
         public string Messages
         {
             get { return _messages; }
-            set {
+            set
+            {
                 _messages = value;
                 Notify(nameof(Messages));
             }
         }
 
 
-        public AirportViewModel()          
+        public AirportViewModel()
         {
             Messages = "";
             Planes = new ObservableCollection<Models.Plane>();
@@ -42,15 +43,7 @@ namespace Client.ViewModels
             Init();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        private async void Notify(string propName)
-        {
-            await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-            });
-        }
         /// <summary>
         /// Initialize the view model
         /// </summary>
@@ -59,6 +52,7 @@ namespace Client.ViewModels
 
             Log("Initializing ..");
 
+            //First task who gets the stations state
             var t1 = new Task(async () =>
             {
                 HttpClient httpClient = new HttpClient();
@@ -66,11 +60,13 @@ namespace Client.ViewModels
                 Task<HttpResponseMessage> t = null;
                 try
                 {
-                    t = httpClient.GetAsync("http://localhost:63938/api/airport/GetCurrentStationsState");
+                    //IMPORTANT !!
+                    //If the link above doesn't work anymore , it's because the free azure account doesn't work anymore , so you need to do it locally
+                    t = httpClient.GetAsync("https://finalprojectsela.azurewebsites.net/api/airport/GetCurrentStationsState");
                     t.Wait();
                 }
 
-                catch(Exception exc)
+                catch (Exception exc)
                 {
                     OnError(exc.Message);
                 }
@@ -85,7 +81,7 @@ namespace Client.ViewModels
                         {
                             if (station.Plane != null)
                             {
-                                Planes.Add(new Models.Plane(station.Plane.Name, DateTime.Now, 0, Common.Enums.FlightState.Arrival));
+                                Planes.Add(new Models.Plane(station.Plane.Name, station.Plane.ActionDate, station.Plane.waitingTime, station.Plane.flightState));
                                 Stations.Add(new Models.Station(station.Number) { Plane = station.Plane.Name });
                             }
 
@@ -96,6 +92,7 @@ namespace Client.ViewModels
                 }
             });
 
+            //Second Task who get the future departures and arrivals
             var t2 = new Task(async () =>
             {
                 HttpClient httpClient = new HttpClient();
@@ -103,14 +100,16 @@ namespace Client.ViewModels
                 Task<HttpResponseMessage> t = null;
                 try
                 {
-                    t = httpClient.GetAsync("http://localhost:63938/api/airport/GetFutureDeparturesAndArrivals");
+                    //IMPORTANT !!
+                    //If the link above doesn't work anymore , it's because the free azure account doesn't work anymore , so you need to do it locally
+                    t = httpClient.GetAsync("https://finalprojectsela.azurewebsites.net/api/airport/GetFutureDeparturesAndArrivals");
                     t.Wait();
                 }
-                catch(Exception exc)
+                catch (Exception exc)
                 {
                     OnError(exc.Message);
                 }
-            
+
                 if (t.Result.StatusCode == System.Net.HttpStatusCode.BadRequest || t.Result.StatusCode == System.Net.HttpStatusCode.InternalServerError)
                     OnError(t.Result.Content.ReadAsStringAsync().Result);
                 else
@@ -126,20 +125,34 @@ namespace Client.ViewModels
                 }
             });
 
-            var t3 = new Task(() => {
-                HubConnection hubConnection = new HubConnection("http://localhost:63938/");
-                var proxy = hubConnection.CreateHubProxy("AirportHub");
-                proxy.On<Common.Plane>("departureOrArrival", DepartureOrArrival);
-                proxy.On<Common.Plane>("moved", Moved);
-                proxy.On<string>("onerror", OnError);
-                hubConnection.Start();
+            //Third task who open the hub connection
+            var t3 = new Task(() =>
+            {
+                try
+                {
+                    //IMPORTANT !!
+                    //If the link above doesn't work anymore , it's because the free azure account doesn't work anymore , so you need to do it locally
+                    HubConnection hubConnection = new HubConnection("https://finalprojectsela.azurewebsites.net");
+                    var proxy = hubConnection.CreateHubProxy("AirportHub");
+                    proxy.On<Common.Plane>("departureOrArrival", DepartureOrArrival);
+                    proxy.On<Common.Plane>("moved", Moved);
+                    proxy.On<string>("onerror", OnError);
+                    hubConnection.Start();
+                }
+                catch (Exception exc)
+                {
+                    OnError(exc.Message);
+                    throw;
+                }
+
+
             });
 
             t1.Start();
             t2.Start();
             t3.Start();
 
-            Task.WhenAll(t1, t2, t3).ContinueWith((t) => { Log("Finished initialization ! "); });   
+            Task.WhenAll(t1, t2, t3).ContinueWith((t) => { Log("Finished initialization ! "); });
         }
 
         /// <summary>
@@ -208,12 +221,22 @@ namespace Client.ViewModels
             Log(errorMessage);
         }
 
-       private void Log(string message)
+        private void Log(string message)
         {
             StringBuilder str = new StringBuilder();
             str.AppendLine(DateTime.Now.ToString("dd MMMM yyyy HH:mm:ss") + " -> " + message + Environment.NewLine);
             str.AppendLine(Messages);
             Messages = str.ToString();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private async void Notify(string propName)
+        {
+            await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+            });
         }
     }
 }

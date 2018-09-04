@@ -56,7 +56,9 @@ namespace Simulator
 
             var json = JsonConvert.SerializeObject(plane);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var t = httpClient.PostAsync("http://localhost:63938/api/airport/DepartureOrArrival", httpContent);
+            //IMPORTANT !!
+            //If the link above doesn't work anymore , it's because the free azure account doesn't work anymore , so you need to do it locally
+            var t = httpClient.PostAsync("https://finalprojectsela.azurewebsites.net/api/airport/DepartureOrArrival", httpContent);
             t.Wait();
 
             if (t.Result.StatusCode == System.Net.HttpStatusCode.BadRequest || t.Result.StatusCode == System.Net.HttpStatusCode.InternalServerError)

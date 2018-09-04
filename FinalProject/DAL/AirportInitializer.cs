@@ -3,7 +3,7 @@ using System.Data.Entity;
 
 namespace DAL
 {
-    class AirportInitializer : DropCreateDatabaseAlways<AirportDataModel>
+    class AirportInitializer : CreateDatabaseIfNotExists<AirportDataModel>
     {
         protected override void Seed(AirportDataModel context)
         {

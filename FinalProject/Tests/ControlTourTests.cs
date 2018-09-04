@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Tests
 {
-    public class AirportManagerTests
+    public class ControlTourTests
     {
 
         //Xunit is a nuget package that will run all tests at the same time (quicker) ,
@@ -82,6 +82,16 @@ namespace Tests
             airport.NewDepartureOrArrival(plane);
 
             Assert.Contains(plane, airport.waitingList);
+        }
+
+        [Fact]
+        public void InitializeTest()
+        {
+            var stationmock = new MockService().GetStationRepositoryMock();
+
+            var airport = new ControlTour(new QueueService(), stationmock.Object);
+
+            Assert.Equal(8, airport.Stations.Count);
         }
 
         [Fact]

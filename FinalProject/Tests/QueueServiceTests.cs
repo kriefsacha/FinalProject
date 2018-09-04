@@ -1,4 +1,5 @@
-﻿using BL.Storage;
+﻿using BL;
+using BL.Storage;
 using Common;
 using Common.Enums;
 using System;
@@ -12,6 +13,16 @@ namespace Tests
 {
     public class QueueServiceTests
     {
+        [Fact]
+        public void InitQueueTest()
+        {
+            var queueService = new QueueService();
+            var mock = new MockService().GetStationRepositoryMock();
+            var airport = new ControlTour(queueService,mock.Object);
+
+            Assert.Equal(7, queueService.queuesSteps.Count);
+        }
+
         [Fact]
         public void EnQueueTest()
         {

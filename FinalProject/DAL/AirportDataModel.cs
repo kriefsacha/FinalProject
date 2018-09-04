@@ -1,4 +1,5 @@
 using Common.Enums;
+using Microsoft.Azure;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
@@ -7,9 +8,7 @@ namespace DAL
 {
     public class AirportDataModel : DbContext
     {
-        //static readonly string connectionString = CloudConfigurationManager.GetSetting("dbconnectionstring");
-
-        static readonly string connectionString = @"data source=(LocalDb)\MSSQLLocalDB;initial catalog=FinalProjectDB;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
+        static readonly string connectionString = CloudConfigurationManager.GetSetting("dbconnectionstring");
 
         public AirportDataModel()
             : base(connectionString)

@@ -82,7 +82,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AirportManagerTests.cs" />
+    <Compile Include="ControlTourTests.cs" />
     <Compile Include="MockService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueServiceTests.cs" />
