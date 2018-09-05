@@ -3,6 +3,9 @@ using Windows.UI.Xaml.Data;
 
 namespace Client.Converters
 {
+    /// <summary>
+    /// Converter that converts from DateTime to Date format
+    /// </summary>
     public class DateTimeToDateFormatConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

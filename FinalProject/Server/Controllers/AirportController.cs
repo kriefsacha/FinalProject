@@ -10,7 +10,7 @@ namespace Server.Controllers
 {
     public class AirportController : ApiController
     {
-        IServerManager manager;
+        private IServerManager manager;
 
         public AirportController(IServerManager manager)
         {

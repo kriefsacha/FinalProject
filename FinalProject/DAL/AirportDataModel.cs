@@ -8,6 +8,11 @@ namespace DAL
 {
     public class AirportDataModel : DbContext
     {
+        //IMPORTANT
+        //If you want to run in locally (because we have free azure account so maybe it expired , just put this connection string :
+
+        //static readonly string connectionString = @"data source=(LocalDb)\MSSQLLocalDB;initial catalog=FinalProjectDB;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
+
         static readonly string connectionString = CloudConfigurationManager.GetSetting("dbconnectionstring");
 
         public AirportDataModel()

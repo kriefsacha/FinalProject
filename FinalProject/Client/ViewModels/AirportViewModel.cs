@@ -61,7 +61,7 @@ namespace Client.ViewModels
                 try
                 {
                     //IMPORTANT !!
-                    //If the link above doesn't work anymore , it's because the free azure account doesn't work anymore , so you need to do it locally
+                    //If the link above doesn't work , it's because the free azure account doesn't work anymore , so you need to run it locally
                     t = httpClient.GetAsync("https://finalprojectsela.azurewebsites.net/api/airport/GetCurrentStationsState");
                     t.Wait();
                 }
@@ -101,7 +101,7 @@ namespace Client.ViewModels
                 try
                 {
                     //IMPORTANT !!
-                    //If the link above doesn't work anymore , it's because the free azure account doesn't work anymore , so you need to do it locally
+                    //If the link above doesn't work , it's because the free azure account doesn't work anymore , so you need to run it locally
                     t = httpClient.GetAsync("https://finalprojectsela.azurewebsites.net/api/airport/GetFutureDeparturesAndArrivals");
                     t.Wait();
                 }
@@ -131,7 +131,7 @@ namespace Client.ViewModels
                 try
                 {
                     //IMPORTANT !!
-                    //If the link above doesn't work anymore , it's because the free azure account doesn't work anymore , so you need to do it locally
+                    //If the link above doesn't work , it's because the free azure account doesn't work anymore , so you need to run it locally
                     HubConnection hubConnection = new HubConnection("https://finalprojectsela.azurewebsites.net");
                     var proxy = hubConnection.CreateHubProxy("AirportHub");
                     proxy.On<Common.Plane>("departureOrArrival", DepartureOrArrival);

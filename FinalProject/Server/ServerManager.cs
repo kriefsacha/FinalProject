@@ -8,9 +8,9 @@ namespace Server
 {
     public class ServerManager : IServerManager
     {
-        IControlTour controlTour;
-        IHubService hubService;
-        IDalService dalService;
+        private IControlTour controlTour;
+        private IHubService hubService;
+        private IDalService dalService;
 
         public ServerManager(IControlTour controlTour, IHubService hubService, IDalService dalService)
         {

@@ -7,9 +7,9 @@ namespace Server.Services
 {
     internal class DalService : IDalService
     {
-        IFlightRepository flightRepository;
-        IPlaneRepository planeRepository;
-        IStationRepository stationRepository;
+        private IFlightRepository flightRepository;
+        private IPlaneRepository planeRepository;
+        private IStationRepository stationRepository;
 
         public DalService(IFlightRepository flightRepository,
             IPlaneRepository planeRepository,

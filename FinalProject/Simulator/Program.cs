@@ -57,7 +57,7 @@ namespace Simulator
             var json = JsonConvert.SerializeObject(plane);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             //IMPORTANT !!
-            //If the link above doesn't work anymore , it's because the free azure account doesn't work anymore , so you need to do it locally
+            //If the link above doesn't work , it's because the free azure account doesn't work anymore , so you need to run it locally
             var t = httpClient.PostAsync("https://finalprojectsela.azurewebsites.net/api/airport/DepartureOrArrival", httpContent);
             t.Wait();
 
@@ -92,12 +92,16 @@ namespace Simulator
         /// <summary>
         /// Get a new action date ( date that the plane departure/arrive )
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The date</returns>
         private static DateTime GetActionDate()
         {
             return DateTime.Now.AddMinutes(rnd.Next(1,3));
         }
 
+        /// <summary>
+        /// Get a new waiting time in milliseconds (time that the plane will wait in every station)
+        /// </summary>
+        /// <returns>The number</returns>
         private static int GetWaitingTime()
         {
             return rnd.Next(4000, 10000);
